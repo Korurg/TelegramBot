@@ -1,0 +1,7 @@
+services:
+  telegram-bot:
+    build:
+      dockerfile: Dockerfile
+    environment:
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
+      LIBS_PATH: ${TELEGRAM_BOT_LIBS_PATH}

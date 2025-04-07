@@ -15,7 +15,7 @@ tasks.register("buildAndCopyModules") {
             copy {
                 from(sourceFile)
                 into(targetDir)
-                rename { fileName ->
+                rename { _ ->
                     "$module-${project(":$module").version}.jar"
                 }
             }
