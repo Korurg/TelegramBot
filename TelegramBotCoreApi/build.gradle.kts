@@ -1,4 +1,5 @@
 plugins {
+    `java-library`
     kotlin("jvm") version "2.0.21"
 }
 
@@ -10,7 +11,9 @@ repositories {
 }
 
 dependencies {
-    api("org.telegram:telegrambots-meta:8.2.0")
+    api("io.github.kotlin-telegram-bot.kotlin-telegram-bot:telegram:6.3.0")
+    api("org.slf4j:slf4j-api:2.0.17")
+    api("ch.qos.logback:logback-classic:1.5.18")
     testImplementation(kotlin("test"))
 }
 
