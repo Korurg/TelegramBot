@@ -1,4 +1,5 @@
 plugins {
+    `java-library`
     kotlin("jvm") version "2.0.21"
 }
 
@@ -9,13 +10,8 @@ repositories {
     mavenCentral()
 }
 
-val quarkusPlatformGroupId: String by project
-val quarkusPlatformArtifactId: String by project
-val quarkusPlatformVersion: String by project
-
 dependencies {
-    implementation(enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}"))
-
+    implementation("org.reflections:reflections:0.10.2")
     api(project(":TelegramBotCoreApi"))
     testImplementation(kotlin("test"))
 }

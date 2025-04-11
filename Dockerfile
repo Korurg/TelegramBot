@@ -21,7 +21,7 @@ WORKDIR /telegram-bot
 
 COPY --from=build /build/TelegramBot/build/libs/*.jar ./telegram-bot.jar
 COPY --from=build /build/scripts/entrypoint.sh ./entrypoint.sh
-COPY --from=build /build/libs/* ./libs/
+COPY --from=build /build/extensions/* ./extensions/
 
 RUN chmod ug+x ./entrypoint.sh
 

@@ -1,4 +1,5 @@
 plugins {
+    `java-library`
     kotlin("jvm") version "2.0.21"
 }
 
@@ -10,6 +11,7 @@ repositories {
 }
 
 dependencies {
+    implementation(project(":TelegramBotCoreApi"))
     testImplementation(kotlin("test"))
 }
 

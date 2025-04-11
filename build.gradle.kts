@@ -1,3 +1,12 @@
+allprojects{
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven { url = uri("https://jitpack.io") }
+    }
+}
+
+
 var modules = arrayOf(
     "CoopChat"
 )
@@ -10,7 +19,7 @@ tasks.register("buildAndCopyModules") {
         doLast {
             val sourceFile = project(":$module").tasks
                 .getByName<Jar>("jar").archiveFile.get().asFile
-            val targetDir = file("libs/").apply { mkdirs() }
+            val targetDir = file("extensions/").apply { mkdirs() }
 
             copy {
                 from(sourceFile)
