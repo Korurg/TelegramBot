@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "2.0.21"
+    kotlin("jvm")
     kotlin("plugin.spring") version "1.9.25"
     id("org.springframework.boot") version "3.4.4"
     id("io.spring.dependency-management") version "1.1.7"
@@ -14,12 +14,13 @@ java {
     }
 }
 
-repositories {
-    mavenCentral()
-}
-
 dependencies {
     implementation(project(":TelegramBotCoreImpl"))
+    implementation(project(":TelegramBotAdapter"))
+
+    implementation(libs.postgresql)
+    implementation(libs.sqlite)
+    implementation(libs.hikari)
 
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.jetbrains.kotlin:kotlin-reflect")

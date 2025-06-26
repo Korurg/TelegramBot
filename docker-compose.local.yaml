@@ -1,0 +1,16 @@
+services:
+  telegram-bot-postgres:
+    image: postgres:17
+    restart: no
+    ports:
+      - "5440:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: coop_telegram_bot
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
+    driver: local

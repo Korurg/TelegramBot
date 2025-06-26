@@ -1,7 +1,6 @@
 services:
   telegram-bot:
-    build:
-      dockerfile: Dockerfile
+    image: korurg/coop-telegram-bot:latest
     environment:
       TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
       EXTENSIONS_PATH: ${TELEGRAM_BOT_EXTENSIONS_PATH}

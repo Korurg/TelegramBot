@@ -7,7 +7,6 @@ build/
 .classpath
 .settings/
 bin/
-libs/
 
 # IntelliJ
 .idea
@@ -40,5 +39,3 @@ nb-configuration.xml
 /.quarkus/cli/plugins/
 # TLS Certificates
 .certs/
-
-./extensions
