@@ -1,16 +1,21 @@
 package com.github.korurg.coopchatmodule.triggers
 
-import com.github.korurg.telegrambot.api.trigger.message.MessageTrigger
-import com.github.kotlintelegrambot.Bot
-import com.github.kotlintelegrambot.entities.ChatId
-import com.github.kotlintelegrambot.entities.Message
-import com.github.kotlintelegrambot.entities.Update
+import com.github.korurg.telegrambot.application.port.out.TelegramMessageSendPort
+import com.github.korurg.telegrambot.domain.TelegramBotReceiveMessageTrigger
+import com.github.korurg.telegrambot.domain.TelegramMessage
+import com.github.korurg.telegrambot.domain.TelegramSendMessageCommand
 
-class HelloWorldTrigger : MessageTrigger() {
-    override fun action(data: String, bot: Bot, update: Update, message: Message) {
-
-
-        bot.sendMessage(ChatId.fromId(message.chat.id), data)
-
+class HelloWorldTrigger(
+    private val telegramMessageSendPort: TelegramMessageSendPort
+) : TelegramBotReceiveMessageTrigger {
+    override fun handleMessage(message: TelegramMessage) {
+        message.text?.let {
+            telegramMessageSendPort.sendMessage(
+                TelegramSendMessageCommand(
+                    chatId = message.chat.chatId,
+                    text = "Hello world"
+                )
+            )
+        }
     }
 }

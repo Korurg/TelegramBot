@@ -17,6 +17,7 @@ java {
 dependencies {
     implementation(project(":TelegramBotCoreImpl"))
     implementation(project(":TelegramBotAdapter"))
+    implementation(project(":CoopChatModuleImpl"))
 
     implementation(libs.postgresql)
     implementation(libs.sqlite)

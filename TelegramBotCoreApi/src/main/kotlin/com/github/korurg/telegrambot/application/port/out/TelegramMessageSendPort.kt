@@ -1,4 +1,8 @@
 package com.github.korurg.telegrambot.application.port.out
 
-interface TelegramMessageSendPort {
+import com.github.korurg.telegrambot.domain.TelegramSendMessageCommand
+
+fun interface TelegramMessageSendPort {
+
+    fun sendMessage(message: TelegramSendMessageCommand)
 }

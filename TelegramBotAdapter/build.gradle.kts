@@ -7,7 +7,7 @@ group = "com.github.korurg"
 version = "unspecified"
 
 dependencies {
-    api(libs.telegram.bot)
+    implementation(libs.telegram.bot)
     api(project(":TelegramBotCoreApi"))
 
     testImplementation(kotlin("test"))

@@ -2,7 +2,7 @@ pluginManagement {
     plugins {
         id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
         id("com.palantir.git-version") version "3.4.0"
-        kotlin("jvm") version "2.0.21"
+        kotlin("jvm") version "2.2.0"
     }
 }
 
