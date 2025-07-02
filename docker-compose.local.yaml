@@ -14,3 +14,5 @@ services:
 volumes:
   pgdata:
     driver: local
+  sqlite:
+    driver: local

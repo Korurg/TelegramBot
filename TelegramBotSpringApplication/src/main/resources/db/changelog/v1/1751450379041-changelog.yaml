@@ -1,0 +1,15 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1751450379041-1
+      author: korurg
+      changes:
+        - createTable:
+            tableName: test
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false

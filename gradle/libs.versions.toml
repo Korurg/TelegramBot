@@ -3,15 +3,21 @@ reflections = { prefer = "0.10.2" }
 postgresql = { prefer = "42.7.7" }
 sqlite = { prefer = "3.50.1.0" }
 hikari = { prefer = "6.3.0" }
+jooq = { prefer = "3.20.5" }
 telegram-bot = {prefer = "6.3.0"}
+liquibase = {prefer = "4.32.0"}
+springboot = {prefer = "3.4.4"}
 
 [libraries]
 reflections = { module = "org.reflections:reflections", version.ref = "reflections" }
 postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
 sqlite = { module = "org.xerial:sqlite-jdbc", version.ref = "sqlite" }
 hikari = { module = "com.zaxxer:HikariCP", version.ref = "hikari" }
+jooq = { module = "org.jooq:jooq", version.ref = "jooq" }
+liquibase = { module = "org.liquibase:liquibase-core", version.ref = "liquibase" }
 telegram-bot = { module = "com.github.kotlin-telegram-bot:kotlin-telegram-bot", version.ref = "telegram-bot" }
-
+springboot-starter = { module = "org.springframework.boot:spring-boot-starter", version.ref = "springboot" }
+springboot-configurationprocessor = { module = "org.springframework.boot:spring-boot-configuration-processor", version.ref = "springboot" }
 
 [bundles]
 # empty
