@@ -1,10 +1,8 @@
 spring:
   datasource:
-    hikari:
-      maximum-pool-size: 1
-    username: ${JDBC_USER}
-    password: ${JDBC_PASSWORD}
-    url: ${JDBC_URL}
+    username: ${JDBC_USER:""}
+    password: ${JDBC_PASSWORD:""}
+    url: ${JDBC_URL:""}
   application:
     name: TelegramBot
   autoconfigure:
@@ -13,4 +11,4 @@ spring:
 
 telegram:
   bot:
-    token: ${TELEGRAM_BOT_TOKEN}
+    token: ${TELEGRAM_BOT_TOKEN:""}

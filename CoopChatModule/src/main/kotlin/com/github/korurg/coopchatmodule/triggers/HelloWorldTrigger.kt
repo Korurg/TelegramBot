@@ -1,7 +1,7 @@
 package com.github.korurg.coopchatmodule.triggers
 
 import com.github.korurg.telegrambot.application.port.out.TelegramMessageSendPort
-import com.github.korurg.telegrambot.domain.TelegramBotReceiveMessageTrigger
+import com.github.korurg.telegrambot.application.TelegramBotReceiveMessageTrigger
 import com.github.korurg.telegrambot.domain.TelegramMessage
 import com.github.korurg.telegrambot.domain.TelegramSendMessageCommand
 

@@ -10,10 +10,10 @@ class TelegramBotOutAdapter(
 
     private val bot = telegramBot.bot
 
-    override fun sendMessage(message: TelegramSendMessageCommand) {
+    override fun sendMessage(sendMessageCommand: TelegramSendMessageCommand) {
         bot.sendMessage(
-            chatId = com.github.kotlintelegrambot.entities.ChatId.Companion.fromId(message.chatId.id),
-            text = message.text
+            chatId = com.github.kotlintelegrambot.entities.ChatId.Companion.fromId(sendMessageCommand.chatId.id),
+            text = sendMessageCommand.text
         )
     }
 }

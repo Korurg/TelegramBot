@@ -1,1 +1,1 @@
-com.github.korurg.persistence.config.PostgresDatabaseConfig
+com.github.korurg.persistence.config.PersistenceAdapterConfig
