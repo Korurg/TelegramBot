@@ -10,28 +10,11 @@ import java.time.OffsetDateTime
 @Component
 class TelegramUserRepository(
     private val dslContext: DSLContext,
+) : AbstractJooqRepository<TelegramUserRecord, Long?>(
+    dslContext,
+    TELEGRAM_USER,
+    TELEGRAM_USER.ID
 ) {
-
-    fun save(telegramUserRecord: TelegramUserRecord): TelegramUserRecord {
-        val savedId = dslContext.insertInto(TELEGRAM_USER)
-            .set(telegramUserRecord)
-            .returningResult(TELEGRAM_USER.ID)
-            .fetchOne()
-            ?.into(Long::class.java)
-
-        requireNotNull(savedId)
-
-        telegramUserRecord.id = savedId
-        return telegramUserRecord
-    }
-
-    fun findById(id: Long): TelegramUserRecord? {
-        return dslContext.selectFrom(TELEGRAM_USER)
-            .where(TELEGRAM_USER.ID.eq(id))
-            .fetchOne()
-            ?.into(TelegramUserRecord::class.java)
-    }
-
     fun upsertByTelegramId(telegramUserRecord: TelegramUserRecord) {
 
         dslContext.transaction { config ->
