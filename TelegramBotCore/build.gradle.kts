@@ -5,6 +5,7 @@ plugins {
 
 dependencies {
     implementation(libs.reflections)
+    api(libs.logging)
 
     testImplementation(kotlin("test"))
 }

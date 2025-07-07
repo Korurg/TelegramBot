@@ -17,7 +17,7 @@ import javax.sql.DataSource
 
 
 @Configuration
-class PostgresDatabaseConfig {
+class DatabaseConfig {
     @Bean
     @ConfigurationProperties("spring.datasource.hikari")
     fun hikariConfig(
@@ -29,6 +29,9 @@ class PostgresDatabaseConfig {
             this.jdbcUrl = jdbcUrl
             this.password = password
             this.username = user
+            if (isSqlite(jdbcUrl)) {
+                this.maximumPoolSize = 1
+            }
         }
     }
 
@@ -39,7 +42,14 @@ class PostgresDatabaseConfig {
 
     @Bean
     fun dslContext(dataSource: DataSource): DSLContext {
-        return DSL.using(dataSource, SQLDialect.POSTGRES)
+        val jdbcUrl = (dataSource as HikariDataSource).jdbcUrl
+
+        var dialect = SQLDialect.POSTGRES
+        if (isSqlite(jdbcUrl)) {
+            dialect = SQLDialect.SQLITE
+        }
+
+        return DSL.using(dataSource, dialect)
     }
 
     @Bean
@@ -58,5 +68,9 @@ class PostgresDatabaseConfig {
 
             return liquibase
         }
+    }
+
+    private fun isSqlite(jdbcUrl: String): Boolean {
+        return jdbcUrl.startsWith("jdbc:sqlite:")
     }
 }
