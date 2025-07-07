@@ -17,7 +17,7 @@ class TelegramUserAdapter(
         telegramUserRepository.upsertByTelegramId(
             TelegramUserRecord(
                 id = null,
-                telegramId = user.userId.id,
+                telegramId = user.id.value,
                 firstName = user.firstName,
                 lastName = user.lastName,
                 username = user.username,

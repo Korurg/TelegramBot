@@ -1,4 +1,4 @@
 package com.github.korurg.telegrambot.domain.id
 
 @JvmInline
-value class ChatId(val id: Long)
+value class ChatId(val value: Long)
