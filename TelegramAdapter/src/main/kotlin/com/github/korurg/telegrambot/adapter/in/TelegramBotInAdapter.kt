@@ -21,12 +21,14 @@ class TelegramBotInAdapter (
                 telegramMessageReceiveUseCase.receiveMessage(
                     TelegramMessage(
                         chat = TelegramChat(
-                            chatId = ChatId(message.chat.id)
+                            id = ChatId(message.chat.id),
+                            title = message.chat.title,
+                            type = message.chat.type,
                         ),
                         text = message.text,
                         from = message.from?.let {
                             TelegramUser(
-                                userId = UserId(it.id),
+                                id = UserId(it.id),
                                 firstName = it.firstName,
                                 lastName = it.lastName,
                                 username = it.username,

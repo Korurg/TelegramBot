@@ -12,7 +12,7 @@ class HelloWorldTrigger(
         message.text?.let {
             telegramMessageSendPort.sendMessage(
                 TelegramSendMessageCommand(
-                    chatId = message.chat.chatId,
+                    chatId = message.chat.id,
                     text = "Hello world"
                 )
             )

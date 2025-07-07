@@ -12,7 +12,7 @@ class TelegramBotOutAdapter(
 
     override fun sendMessage(sendMessageCommand: TelegramSendMessageCommand) {
         bot.sendMessage(
-            chatId = com.github.kotlintelegrambot.entities.ChatId.Companion.fromId(sendMessageCommand.chatId.id),
+            chatId = com.github.kotlintelegrambot.entities.ChatId.Companion.fromId(sendMessageCommand.chatId.value),
             text = sendMessageCommand.text
         )
     }
