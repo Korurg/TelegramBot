@@ -1,5 +1,6 @@
 plugins {
     `java-library`
+    kotlin("plugin.spring")
     kotlin("jvm")
 }
 
@@ -13,6 +14,10 @@ dependencies {
     api(project(":CoopChatModule"))
     api(project(":TelegramBotCore"))
 
+
+    implementation(libs.springboot.starter)
+    compileOnly(libs.springboot.configurationProcessor)
+    annotationProcessor(libs.springboot.configurationProcessor)
 
     testImplementation(kotlin("test"))
 }

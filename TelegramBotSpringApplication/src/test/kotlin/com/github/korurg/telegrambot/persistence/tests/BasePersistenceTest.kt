@@ -1,6 +1,6 @@
 package com.github.korurg.telegrambot.persistence.tests
 
-import com.github.korurg.persistence.repository.TelegramUserRepository
+import com.github.korurg.persistenceadapter.repository.TelegramUserRepository
 import com.github.korurg.telegrambot.persistence.config.BaseDatabaseConfig
 import com.github.korurg.telegrambot.persistence.config.PostgresDatabaseConfig
 import com.github.korurg.telegrambot.persistence.config.SqliteDatabaseConfig
