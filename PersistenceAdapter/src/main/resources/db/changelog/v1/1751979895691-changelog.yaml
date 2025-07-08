@@ -1,0 +1,69 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1751979895691-1
+      author: korurg
+      preConditions:
+        - onFail: MARK_RAN
+        - dbms:
+            type: sqlite
+      changes:
+        - createTable:
+            tableName: game
+            columns:
+              - column:
+                  name: id
+                  type: integer
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+  - changeSet:
+      id: 1751979895691-2
+      author: korurg
+      preConditions:
+        - onFail: MARK_RAN
+        - dbms:
+            type: postgresql
+      changes:
+        - createTable:
+            tableName: game
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+  - changeSet:
+      id: 1751979895691-3
+      author: korurg
+      changes:
+        - addColumn:
+            tableName: game
+            columns:
+              - column:
+                  name: name
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: min_players
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: max_players
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated
+                  type: timestamptz
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created
+                  type: timestamptz
+                  constraints:
+                    nullable: false
