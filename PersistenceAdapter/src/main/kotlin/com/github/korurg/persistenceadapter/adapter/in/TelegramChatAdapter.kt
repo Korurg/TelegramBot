@@ -9,10 +9,9 @@ import java.time.OffsetDateTime
 
 @Component
 class TelegramChatAdapter(
-    private val telegramChatRepository: TelegramChatRepository
-
+    private val telegramChatRepository: TelegramChatRepository,
 ) : TelegramChatSavePort {
-    override fun saveTelegramChat(chat: TelegramChat) {
+    override suspend fun saveTelegramChat(chat: TelegramChat) {
         telegramChatRepository.upsertByTelegramId(
             TelegramChatRecord(
                 id = null,

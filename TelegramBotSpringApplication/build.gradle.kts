@@ -1,8 +1,8 @@
 plugins {
-    kotlin("jvm")
-    kotlin("plugin.spring")
-    id("org.springframework.boot")
-    id("io.spring.dependency-management")
+    alias(libs.plugins.jvm)
+    alias(libs.plugins.spring.plugin)
+    alias(libs.plugins.spring.springBoot)
+    alias(libs.plugins.spring.dependencyManagment)
 }
 
 
@@ -13,6 +13,7 @@ dependencies {
     implementation(project(":TelegramAdapter"))
     implementation(project(":CoopChatModule"))
     implementation(project(":PersistenceAdapter"))
+    implementation(project(":SteamAdapter"))
 
 
     implementation("org.springframework.boot:spring-boot-starter")

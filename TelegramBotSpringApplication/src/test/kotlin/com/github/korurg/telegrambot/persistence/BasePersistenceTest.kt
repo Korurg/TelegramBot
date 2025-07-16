@@ -1,9 +1,9 @@
-package com.github.korurg.telegrambot.persistence.tests
+package com.github.korurg.telegrambot.persistence
 
 import com.github.korurg.persistenceadapter.repository.TelegramUserRepository
-import com.github.korurg.telegrambot.persistence.config.BaseDatabaseConfig
-import com.github.korurg.telegrambot.persistence.config.PostgresDatabaseConfig
-import com.github.korurg.telegrambot.persistence.config.SqliteDatabaseConfig
+import com.github.korurg.telegrambot.config.BaseDatabaseConfig
+import com.github.korurg.telegrambot.config.PostgresDatabaseConfig
+import com.github.korurg.telegrambot.config.SqliteDatabaseConfig
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Import

@@ -11,9 +11,7 @@ import java.time.OffsetDateTime
 class TelegramUserAdapter(
     private val telegramUserRepository: TelegramUserRepository
 ) : TelegramUserSavePort {
-
-
-    override fun saveTelegramUser(user: TelegramUser) {
+    override suspend fun saveTelegramUser(user: TelegramUser) {
         telegramUserRepository.upsertByTelegramId(
             TelegramUserRecord(
                 id = null,

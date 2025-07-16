@@ -6,6 +6,7 @@ plugins {
 dependencies {
     implementation(libs.reflections)
     api(libs.logging)
+    api(libs.coroutines)
 
     testImplementation(kotlin("test"))
 }

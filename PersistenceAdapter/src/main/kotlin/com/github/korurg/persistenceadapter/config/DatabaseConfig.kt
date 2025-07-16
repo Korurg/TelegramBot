@@ -42,14 +42,17 @@ class DatabaseConfig {
 
     @Bean
     fun dslContext(dataSource: DataSource): DSLContext {
+        return DSL.using(dataSource, getDialect(dataSource))
+    }
+
+    private fun getDialect(dataSource: DataSource): SQLDialect {
         val jdbcUrl = (dataSource as HikariDataSource).jdbcUrl
 
         var dialect = SQLDialect.POSTGRES
         if (isSqlite(jdbcUrl)) {
             dialect = SQLDialect.SQLITE
         }
-
-        return DSL.using(dataSource, dialect)
+        return dialect
     }
 
     @Bean
@@ -58,8 +61,16 @@ class DatabaseConfig {
             val database = DatabaseFactory.getInstance()
                 .findCorrectDatabaseImplementation(JdbcConnection(it))
 
+            val dialect = getDialect(dataSource)
+
+            val file = if (SQLDialect.SQLITE == dialect) {
+                "sqlite"
+            } else {
+                "postgresql"
+            }
+
             val liquibase = Liquibase(
-                "db/changelog/db.changelog-master.yaml",
+                "db/changelog/$file.db.changelog-master.yaml",
                 ClassLoaderResourceAccessor(),
                 database
             )

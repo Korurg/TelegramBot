@@ -10,6 +10,8 @@ import com.github.kotlintelegrambot.dispatcher.Dispatcher
 import com.github.kotlintelegrambot.dispatcher.handlers.MessageHandlerEnvironment
 import com.github.kotlintelegrambot.dispatcher.message
 import com.github.kotlintelegrambot.entities.BotCommand
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
@@ -69,6 +71,9 @@ class TelegramAdapterConfig {
             messages = messages
         )
     }
+
+    @Bean
+    fun defaultTelegramCoroutineDispatcher(): CoroutineDispatcher = Dispatchers.IO
 
     @Bean
     fun telegramBotConfig(

@@ -1,0 +1,46 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1751882269001-1
+      author: korurg
+      changes:
+        - createTable:
+            tableName: telegram_chat
+            columns:
+              - column:
+                  name: id
+                  type: integer
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+  - changeSet:
+      id: 1751882269001-3
+      author: korurg
+      changes:
+        - addColumn:
+            tableName: telegram_chat
+            columns:
+              - column:
+                  name: telegram_id
+                  type: bigint
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: title
+                  type: text
+              - column:
+                  name: type
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated
+                  type: timestamptz
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created
+                  type: timestamptz
+                  constraints:
+                    nullable: false

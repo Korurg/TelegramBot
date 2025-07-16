@@ -3,9 +3,12 @@ import org.jooq.meta.jaxb.Property
 
 plugins {
     `java-library`
-    kotlin("jvm")
-    kotlin("plugin.spring")
-    id("nu.studer.jooq") version "8.2"
+
+    alias(libs.plugins.jvm)
+    alias(libs.plugins.spring.plugin)
+    alias(libs.plugins.jooq)
+    alias(libs.plugins.kapt)
+    alias(libs.plugins.ksp)
 }
 
 dependencies {
@@ -13,7 +16,10 @@ dependencies {
     api(project(":TelegramBotCore"))
     api(libs.bundles.db)
 
-    jooqGenerator(libs.jooqMetaExtensions)
+    implementation(libs.bundles.konverterSpring)
+    ksp(libs.bundles.konverterSpringProcessor)
+
+    jooqGenerator(libs.jooq.metaExtensions)
     jooqGenerator(libs.postgresql)
 
     implementation(libs.springboot.starter)
@@ -21,8 +27,6 @@ dependencies {
     annotationProcessor(libs.springboot.configurationProcessor)
 
     testImplementation(kotlin("test"))
-
-
 }
 
 jooq {
