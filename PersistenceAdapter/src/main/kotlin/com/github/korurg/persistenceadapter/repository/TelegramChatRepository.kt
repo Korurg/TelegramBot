@@ -2,6 +2,9 @@ package com.github.korurg.persistenceadapter.repository
 
 import com.github.korurg.persistence.entity.tables.records.TelegramChatRecord
 import com.github.korurg.persistence.entity.tables.references.TELEGRAM_CHAT
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.jooq.DSLContext
 import org.jooq.impl.DSL
 import org.springframework.stereotype.Component
@@ -10,13 +13,16 @@ import java.time.OffsetDateTime
 @Component
 class TelegramChatRepository(
     private val dslContext: DSLContext,
+    private val defaultDbCoroutineDispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : AbstractJooqRepository<TelegramChatRecord, Long?>(
     dslContext,
     TELEGRAM_CHAT,
     TELEGRAM_CHAT.ID
 ) {
-    fun upsertByTelegramId(telegramChatRecord: TelegramChatRecord) {
-
+    @Suppress("kotlin:S6518")
+    suspend fun upsertByTelegramId(
+        telegramChatRecord: TelegramChatRecord
+    ) = withContext(defaultDbCoroutineDispatcher) {
         dslContext.transaction { config ->
             val transactionalDsl = DSL.using(config)
 

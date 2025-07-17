@@ -1,32 +1,10 @@
 databaseChangeLog:
   - changeSet:
-      id: 1751979895691-1
+      id: 1751450379041-2
       author: korurg
-      preConditions:
-        - onFail: MARK_RAN
-        - dbms:
-            type: sqlite
       changes:
         - createTable:
-            tableName: game
-            columns:
-              - column:
-                  name: id
-                  type: integer
-                  autoIncrement: true
-                  constraints:
-                    primaryKey: true
-                    nullable: false
-  - changeSet:
-      id: 1751979895691-2
-      author: korurg
-      preConditions:
-        - onFail: MARK_RAN
-        - dbms:
-            type: postgresql
-      changes:
-        - createTable:
-            tableName: game
+            tableName: telegram_user
             columns:
               - column:
                   name: id
@@ -36,27 +14,37 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
   - changeSet:
-      id: 1751979895691-3
+      id: 1751450379041-3
       author: korurg
       changes:
         - addColumn:
-            tableName: game
+            tableName: telegram_user
             columns:
               - column:
-                  name: name
+                  name: telegram_id
+                  type: bigint
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: first_name
                   type: text
                   constraints:
                     nullable: false
               - column:
-                  name: min_players
-                  type: integer
+                  name: last_name
+                  type: text
+              - column:
+                  name: username
+                  type: text
+              - column:
+                  name: is_bot
+                  type: bool
                   constraints:
                     nullable: false
               - column:
-                  name: max_players
-                  type: integer
-                  constraints:
-                    nullable: false
+                  name: language_code
+                  type: text
               - column:
                   name: updated
                   type: timestamptz

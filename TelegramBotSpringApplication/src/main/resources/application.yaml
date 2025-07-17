@@ -12,3 +12,6 @@ spring:
 telegram:
   bot:
     token: ${TELEGRAM_BOT_TOKEN:""}
+
+steam:
+  webapikey: ${STEAM_WEB_API_KEY:""}

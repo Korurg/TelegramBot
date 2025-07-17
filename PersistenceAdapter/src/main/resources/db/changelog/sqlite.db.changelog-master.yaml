@@ -1,4 +1,4 @@
 databaseChangeLog:
   - includeAll:
-      path: v1/
+      path: v1/sqlite
       relativeToChangelogFile: true

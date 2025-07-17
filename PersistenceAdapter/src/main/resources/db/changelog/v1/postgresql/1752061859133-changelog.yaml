@@ -1,0 +1,230 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1752061859133-2
+      author: korurg
+      changes:
+        - createTable:
+            tableName: steam_app
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+  - changeSet:
+      id: 1752061859133-5
+      author: korurg
+      changes:
+        - createTable:
+            tableName: steam_app_category
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+  - changeSet:
+      id: 1752061859133-8
+      author: korurg
+      changes:
+        - createTable:
+            tableName: steam_app_price
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+  - changeSet:
+      id: 1752061859133-3
+      author: korurg
+      changes:
+        - addColumn:
+            tableName: steam_app
+            columns:
+              - column:
+                  name: steam_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: type
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated
+                  type: timestamptz
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created
+                  type: timestamptz
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 1752061859133-6
+      author: korurg
+      changes:
+        - addColumn:
+            tableName: steam_app_category
+            columns:
+              - column:
+                  name: steam_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated
+                  type: timestamptz
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created
+                  type: timestamptz
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 1752061859133-9
+      author: korurg
+      changes:
+        - addColumn:
+            tableName: steam_app_price
+            columns:
+              - column:
+                  name: steam_app_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_steam_app_id
+                    references: steam_app(id)
+              - column:
+                  name: currency
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: initial
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: final
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: discount_percent
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: initial_formatted
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: final_formatted
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated
+                  type: timestamptz
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created
+                  type: timestamptz
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 1752061859133-10
+      author: korurg
+      changes:
+        - createTable:
+            tableName: steam_app_steam_app_category
+            columns:
+              - column:
+                  name: steam_app_id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    foreignKeyName: fk_steam_app_id
+                    references: steam_app(id)
+              - column:
+                  name: steam_app_category_id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    foreignKeyName: fk_steam_app_category_id
+                    references: steam_app_category(id)
+              - column:
+                  name: updated
+                  type: timestamptz
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created
+                  type: timestamptz
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 1752061859133-11
+      author: korurg
+      changes:
+        - addColumn:
+            tableName: game
+            columns:
+              - column:
+                  name: steam_app_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_steam_app_id
+                    references: steam_app(id)
+  - changeSet:
+      id: 1752061859133-12
+      author: korurg
+      changes:
+        - addColumn:
+            tableName: steam_app
+            columns:
+              - column:
+                  name: version
+                  type: int
+              - column:
+                  name: short_description
+                  type: text
+              - column:
+                  name: description
+                  type: text
+              - column:
+                  name: fill_state
+                  type: text
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 1752061859133-13
+      author: korurg
+      changes:
+        - dropNotNullConstraint:
+            tableName: steam_app
+            columnName: type

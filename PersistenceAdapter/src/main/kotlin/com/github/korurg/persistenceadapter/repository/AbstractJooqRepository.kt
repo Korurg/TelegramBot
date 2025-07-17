@@ -5,22 +5,31 @@ import org.jooq.TableField
 import org.jooq.UpdatableRecord
 import org.jooq.impl.DSL
 import org.jooq.impl.TableImpl
+import java.time.OffsetDateTime
 
 abstract class AbstractJooqRepository<RECORD : UpdatableRecord<RECORD>, ID>(
     private val dslContext: DSLContext,
     private val table: TableImpl<RECORD>,
-    private val idField: TableField<RECORD, ID>
+    private val idField: TableField<RECORD, ID>,
+    private val updatedField: TableField<RECORD, OffsetDateTime?>? = null,
 ) : JooqRepository<RECORD, ID> {
 
-    override fun save(record: RECORD): RECORD {
+    @Suppress("kotlin:S6518")
+    override fun upsert(record: RECORD): RECORD {
         return if (record[idField] == null) {
             dslContext.insertInto(table)
                 .set(record)
                 .returning()
                 .fetchOne()!!
         } else {
-            dslContext.update(table)
+            var update = dslContext.update(table)
                 .set(record)
+
+            updatedField?.let {
+                update = update.set(updatedField, OffsetDateTime.now())
+            }
+
+            update
                 .where(idField.eq(record[idField]))
                 .execute()
 

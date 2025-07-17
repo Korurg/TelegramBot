@@ -2,9 +2,6 @@ package com.github.korurg.telegrambot.config
 
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
-import org.jooq.DSLContext
-import org.jooq.SQLDialect
-import org.jooq.impl.DSL
 import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Primary
@@ -34,7 +31,7 @@ class PostgresDatabaseConfig : BaseDatabaseConfig {
     @Bean
     @Primary
     fun dataSource(): DataSource {
-        while (!postgres.isRunning) {
+        while (!postgres.isRunning){
             Thread.sleep(1000)
         }
         return HikariDataSource(HikariConfig().apply {
@@ -42,12 +39,6 @@ class PostgresDatabaseConfig : BaseDatabaseConfig {
             username = postgres.username
             password = postgres.password
         })
-    }
-
-    @Bean
-    @Primary
-    fun dslContext(dataSource: DataSource): DSLContext {
-        return DSL.using(dataSource, SQLDialect.POSTGRES)
     }
 
     override fun getDataSource() = dataSource()

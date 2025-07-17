@@ -2,9 +2,11 @@ package com.github.korurg.telegrambot.config
 
 import com.github.korurg.coopchatmodule.application.CommandParserService
 import com.github.korurg.coopchatmodule.application.GameService
-import com.github.korurg.coopchatmodule.application.port.out.GameSavePort
+import com.github.korurg.coopchatmodule.application.port.`in`.GameQueryPort
+import com.github.korurg.coopchatmodule.application.port.`in`.SteamAppProviderPort
+import com.github.korurg.coopchatmodule.application.port.out.GameCommandPort
 import com.github.korurg.coopchatmodule.application.triggers.CommandTrigger
-import com.github.korurg.coopchatmodule.application.triggers.HelloWorldTrigger
+import com.github.korurg.coopchatmodule.application.triggers.SteamLinkTrigger
 import com.github.korurg.telegrambot.application.TelegramBotReceiveMessageTrigger
 import com.github.korurg.telegrambot.application.port.out.TelegramMessageSendPort
 import org.springframework.context.annotation.Bean
@@ -14,11 +16,11 @@ import org.springframework.context.annotation.Configuration
 class CoopChatModuleConfig {
 
     @Bean
-    fun helloWorldTrigger(
-        telegramMessageSendPort: TelegramMessageSendPort
+    fun steamLinkTrigger(
+        gameService: GameService
     ): TelegramBotReceiveMessageTrigger {
-        return HelloWorldTrigger(
-            telegramMessageSendPort
+        return SteamLinkTrigger(
+            gameService
         )
     }
 
@@ -29,10 +31,16 @@ class CoopChatModuleConfig {
 
     @Bean
     fun gameService(
-        gameSavePort: GameSavePort
+        gameCommandPort: GameCommandPort,
+        steamAppProviderPort: SteamAppProviderPort,
+        gameQueryPort: GameQueryPort,
+        telegramMessageSendPort: TelegramMessageSendPort,
     ): GameService {
         return GameService(
-            gameSavePort
+            gameCommandPort = gameCommandPort,
+            steamAppProviderPort = steamAppProviderPort,
+            gameQueryPort = gameQueryPort,
+            telegramMessageSendPort = telegramMessageSendPort,
         )
     }
 

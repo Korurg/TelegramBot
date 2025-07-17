@@ -2,9 +2,15 @@ import org.springframework.boot.gradle.plugin.SpringBootPlugin
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 plugins {
-    id("com.palantir.git-version")
-    id("org.springframework.boot") apply false
-    kotlin("jvm") apply false
+    alias(libs.plugins.gitVersion)
+
+    alias(libs.plugins.jvm) apply false
+    alias(libs.plugins.spring.plugin) apply false
+    alias(libs.plugins.spring.springBoot) apply false
+    alias(libs.plugins.foojayResolverConvention) apply false
+    alias(libs.plugins.spring.dependencyManagment) apply false
+    alias(libs.plugins.jooq) apply false
+    alias(libs.plugins.kapt) apply false
 }
 
 val versionDetails: groovy.lang.Closure<com.palantir.gradle.gitversion.VersionDetails> by extra

@@ -1,6 +1,7 @@
 package com.github.korurg.telegrambot.persistence.tests
 
 import com.github.korurg.persistence.entity.tables.records.TelegramUserRecord
+import com.github.korurg.telegrambot.persistence.BasePersistenceTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import java.time.OffsetDateTime
@@ -13,7 +14,7 @@ abstract class UserRepositoryTest : BasePersistenceTest() {
     fun saveTelegramUser_userSaved() {
         val userForSave = createDefaultTelegramUserRecord()
 
-        val savedUser = telegramUserRepository.save(userForSave)
+        val savedUser = telegramUserRepository.upsert(userForSave)
 
         requireNotNull(savedUser.id)
 

@@ -42,3 +42,4 @@ nb-configuration.xml
 .certs/
 
 ./extensions
+.aider*
