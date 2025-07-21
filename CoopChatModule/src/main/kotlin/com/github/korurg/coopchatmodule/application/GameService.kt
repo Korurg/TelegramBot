@@ -5,6 +5,7 @@ import com.github.korurg.coopchatmodule.application.port.`in`.SteamAppProviderPo
 import com.github.korurg.coopchatmodule.application.port.out.GameCommandPort
 import com.github.korurg.coopchatmodule.domain.Game
 import com.github.korurg.coopchatmodule.domain.SaveSteamAppCommand
+import com.github.korurg.coopchatmodule.domain.enums.GameState
 import com.github.korurg.coopchatmodule.domain.enums.SteamAppFillState
 import com.github.korurg.telegrambot.application.port.out.TelegramMessageSendPort
 import com.github.korurg.telegrambot.domain.TelegramSendMessageCommand
@@ -49,6 +50,7 @@ class GameService(
             steamApp = steamApp,
             updated = OffsetDateTime.now(),
             created = OffsetDateTime.now(),
+            gameState = GameState.NEW,
         )
 
         val savedGame = gameCommandPort.saveGame(game)
@@ -57,7 +59,8 @@ class GameService(
             telegramMessageSendPort.sendMessage(
                 TelegramSendMessageCommand(
                     chatId = message.chat.id,
-                    text = "Game \"${savedGame.name}\" saved\nDescription: ${savedGame.steamApp?.shortDescription}",
+                    text = "Game \"${savedGame.name}\" saved\n" +
+                            "Description: ${savedGame.steamApp?.shortDescription}",
                     replyToMessageId = message.messageId,
                 )
             )

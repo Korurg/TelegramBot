@@ -22,7 +22,7 @@ import org.springframework.stereotype.Component
 import java.time.OffsetDateTime
 
 @Component
-class GameAdapter(
+class GameRepository(
     private val dslContext: DSLContext,
     private val gameMapper: GameMapper,
     private val defaultDbCoroutineDispatcher: CoroutineDispatcher = Dispatchers.IO,

@@ -29,6 +29,7 @@ interface GameMapper {
             Mapping(target = "watchPriceChanges", constant = "true"),
             Mapping(target = "watchPurchases", constant = "true"),
             Mapping(target = "watchForUpdates", constant = "true"),
+            Mapping(target = "gameState", constant = "com.github.korurg.coopchatmodule.domain.enums.GameState.NEW"),
         ]
     )
     fun toGame(gameRecord: GameRecord): Game

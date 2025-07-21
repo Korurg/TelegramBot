@@ -4,6 +4,7 @@ import com.github.korurg.coopchatmodule.application.CommandParserService
 import com.github.korurg.coopchatmodule.application.GameService
 import com.github.korurg.coopchatmodule.config.Commands
 import com.github.korurg.coopchatmodule.domain.Game
+import com.github.korurg.coopchatmodule.domain.enums.GameState
 import com.github.korurg.telegrambot.application.TelegramBotReceiveMessageTrigger
 import com.github.korurg.telegrambot.application.port.out.TelegramMessageSendPort
 import com.github.korurg.telegrambot.domain.TelegramMessage
@@ -37,6 +38,7 @@ class CommandTrigger(
                             watchForUpdates = true,
                             updated = OffsetDateTime.now(),
                             created = OffsetDateTime.now(),
+                            gameState = GameState.NEW
                         )
                     )
 
