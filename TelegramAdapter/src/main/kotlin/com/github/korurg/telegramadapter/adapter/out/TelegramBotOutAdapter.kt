@@ -8,9 +8,7 @@ import com.github.kotlintelegrambot.entities.ChatId
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.springframework.stereotype.Component
 
-@Component
 class TelegramBotOutAdapter(
     private val telegramBot: TelegramBot,
     private val htmlToTelegramMessageFormatter: HtmlToTelegramMessageFormatter,

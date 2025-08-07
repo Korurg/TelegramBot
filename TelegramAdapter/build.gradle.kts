@@ -1,7 +1,6 @@
 plugins {
     `java-library`
-    kotlin("plugin.spring")
-    kotlin("jvm")
+    alias(libs.plugins.jvm)
 }
 
 dependencies {
@@ -10,14 +9,8 @@ dependencies {
         exclude("com.github.kotlin-telegram-bot.kotlin-telegram-bot", "webhook")
     }
 
-
     api(project(":CoopChatModule"))
     api(project(":TelegramBotCore"))
-
-
-    implementation(libs.springboot.starter)
-    compileOnly(libs.springboot.configurationProcessor)
-    annotationProcessor(libs.springboot.configurationProcessor)
 
     testImplementation(kotlin("test"))
 }

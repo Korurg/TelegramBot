@@ -44,7 +44,7 @@ class CommandTrigger(
 
                     else -> telegramMessageSendPort.sendMessage(
                         TelegramSendMessageCommand(
-                            chatId = message.chat.id,
+                            chatId = message.chat.telegramId,
                             text = "Unknown command"
                         )
                     )
@@ -54,7 +54,7 @@ class CommandTrigger(
                 e.message?.let { errorMessage ->
                     telegramMessageSendPort.sendMessage(
                         TelegramSendMessageCommand(
-                            chatId = message.chat.id,
+                            chatId = message.chat.telegramId,
                             text = errorMessage
                         )
                     )

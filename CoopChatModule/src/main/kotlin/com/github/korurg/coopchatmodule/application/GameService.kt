@@ -29,7 +29,7 @@ class GameService(
             saveSteamAppCommand.message?.let { message ->
                 telegramMessageSendPort.sendMessage(
                     TelegramSendMessageCommand(
-                        chatId = message.chat.id,
+                        chatId = message.chat.telegramId,
                         text = "Game \"${existedGame.name}\" already saved",
                         replyToMessageId = message.messageId,
                     )
@@ -53,14 +53,14 @@ class GameService(
             gameState = GameState.NEW,
         )
 
-        val savedGame = gameCommandPort.saveGame(game)
+        gameCommandPort.saveGame(game)
 
         saveSteamAppCommand.message?.let { message ->
             telegramMessageSendPort.sendMessage(
                 TelegramSendMessageCommand(
-                    chatId = message.chat.id,
-                    text = "Game \"${savedGame.name}\" saved\n" +
-                            "Description: ${savedGame.steamApp?.shortDescription}",
+                    chatId = message.chat.telegramId,
+                    text = "Game \"${game.name}\" saved\n" +
+                            "Description: ${game.steamApp?.shortDescription}",
                     replyToMessageId = message.messageId,
                 )
             )

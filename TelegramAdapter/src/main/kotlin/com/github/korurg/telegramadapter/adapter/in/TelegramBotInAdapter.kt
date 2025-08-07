@@ -4,9 +4,9 @@ import com.github.korurg.telegrambot.application.port.`in`.TelegramMessageReceiv
 import com.github.korurg.telegrambot.domain.TelegramChat
 import com.github.korurg.telegrambot.domain.TelegramMessage
 import com.github.korurg.telegrambot.domain.TelegramUser
-import com.github.korurg.telegrambot.domain.id.ChatId
+import com.github.korurg.telegrambot.domain.id.ChatExternalId
 import com.github.korurg.telegrambot.domain.id.MessageId
-import com.github.korurg.telegrambot.domain.id.UserId
+import com.github.korurg.telegrambot.domain.id.UserExternalId
 import com.github.kotlintelegrambot.dispatcher.handlers.MessageHandlerEnvironment
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.CoroutineScope
@@ -25,11 +25,11 @@ class TelegramBotInAdapter(
         {
             CoroutineScope(Dispatchers.Default).launch {
                 try {
-                    //TODO: to konverter
+                    //TODO: to mapper
                     telegramMessageReceiveUseCase.receiveMessage(
                         TelegramMessage(
                             chat = TelegramChat(
-                                id = ChatId(message.chat.id),
+                                telegramId = ChatExternalId(message.chat.id),
                                 title = message.chat.title,
                                 type = message.chat.type,
                             ),
@@ -37,7 +37,7 @@ class TelegramBotInAdapter(
                             messageId = MessageId(message.messageId),
                             from = message.from?.let {
                                 TelegramUser(
-                                    id = UserId(it.id),
+                                    telegramId = UserExternalId(it.id),
                                     firstName = it.firstName,
                                     lastName = it.lastName,
                                     username = it.username,

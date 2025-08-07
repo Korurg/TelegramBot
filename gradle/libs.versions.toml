@@ -7,6 +7,7 @@ jooq = { prefer = "3.19.24" }
 telegram-bot = { prefer = "6.3.0" }
 liquibase = { prefer = "4.32.0" }
 springboot = "3.5.3"
+springdata = "3.5.2"
 logging = { prefer = "7.0.7" }
 logback = { prefer = "1.5.18" }
 slf4jApi = { prefer = "2.0.17" }
@@ -14,6 +15,10 @@ ktsteam = { prefer = "1.0.0" }
 mapstruct = { prefer = "1.6.3" }
 coroutines = { prefer = "1.10.2" }
 konverter = { prefer = "4.1.2" }
+hibernate = { prefer = "6.6.18.Final" }
+queryDsl = { prefer = "5.1.0" }
+jimmer = "0.9.102"
+koin = "4.1.0"
 #plugins
 springPlugin = "2.2.0"
 jvm = "2.2.0"
@@ -29,9 +34,12 @@ reflections = { module = "org.reflections:reflections", version.ref = "reflectio
 postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
 sqlite = { module = "org.xerial:sqlite-jdbc", version.ref = "sqlite" }
 hikari = { module = "com.zaxxer:HikariCP", version.ref = "hikari" }
-jooq-core = { module = "org.jooq:jooq", version.ref = "jooq" }
-jooq-metaExtensions = { module = "org.jooq:jooq-meta-extensions", version.ref = "jooq" }
-jooq-kotlinCoroutines = { module = "org.jooq:jooq-kotlin-coroutines", version.ref = "jooq" }
+koin-coreJvm =  { module = "io.insert-koin:koin-core-jvm", version.ref = "koin" }
+jimmer-core =  { module = "org.babyfish.jimmer:jimmer-core", version.ref = "jimmer" }
+jimmer-coreKotlin =  { module = "org.babyfish.jimmer:jimmer-core-kotlin", version.ref = "jimmer" }
+jimmer-ksp =  { module = "org.babyfish.jimmer:jimmer-ksp", version.ref = "jimmer" }
+jimmer-sql =  { module = "org.babyfish.jimmer:jimmer-sql", version.ref = "jimmer" }
+jimmer-sqlKotlin =  { module = "org.babyfish.jimmer:jimmer-sql-kotlin", version.ref = "jimmer" }
 liquibase = { module = "org.liquibase:liquibase-core", version.ref = "liquibase" }
 telegram-bot = { module = "com.github.kotlin-telegram-bot:kotlin-telegram-bot", version.ref = "telegram-bot" }
 springboot-starter = { module = "org.springframework.boot:spring-boot-starter", version.ref = "springboot" }
@@ -46,6 +54,7 @@ coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm", ver
 konverter-api = { module = "io.mcarle:konvert-api", version.ref = "konverter" }
 konverter-processor = { module = "io.mcarle:konvert", version.ref = "konverter" }
 konverter-springInjector = { module = "io.mcarle:konvert-spring-injector", version.ref = "konverter" }
+konverter-koinInjector = { module = "io.mcarle:konvert-koin-injector", version.ref = "konverter" }
 konverter-springAnnotations = { module = "io.mcarle:konvert-spring-annotations", version.ref = "konverter" }
 
 [plugins]
@@ -61,6 +70,6 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 
 [bundles]
 logging = ["logging", "logback", "slf4jApi"]
-db = ["postgresql", "sqlite", "hikari", "jooq-core", "liquibase", "jooq-kotlinCoroutines"]
+db = ["postgresql", "sqlite", "hikari", "liquibase", "jimmer-coreKotlin"]
 konverterSpringProcessor = ["konverter-processor", "konverter-springInjector"]
 konverterSpring = ["konverter-api", "konverter-springAnnotations"]

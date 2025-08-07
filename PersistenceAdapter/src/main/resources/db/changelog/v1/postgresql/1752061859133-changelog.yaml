@@ -177,16 +177,6 @@ databaseChangeLog:
                     nullable: false
                     foreignKeyName: fk_steam_app_category_id
                     references: steam_app_category(id)
-              - column:
-                  name: updated
-                  type: timestamptz
-                  constraints:
-                    nullable: false
-              - column:
-                  name: created
-                  type: timestamptz
-                  constraints:
-                    nullable: false
   - changeSet:
       id: 1752061859133-11
       author: korurg

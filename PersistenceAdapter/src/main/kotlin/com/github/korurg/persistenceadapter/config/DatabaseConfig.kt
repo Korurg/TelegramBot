@@ -6,56 +6,50 @@ import liquibase.Liquibase
 import liquibase.database.DatabaseFactory
 import liquibase.database.jvm.JdbcConnection
 import liquibase.resource.ClassLoaderResourceAccessor
-import org.jooq.DSLContext
-import org.jooq.SQLDialect
-import org.jooq.impl.DSL
-import org.springframework.beans.factory.annotation.Value
-import org.springframework.boot.context.properties.ConfigurationProperties
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
+import org.babyfish.jimmer.sql.dialect.PostgresDialect
+import org.babyfish.jimmer.sql.dialect.SQLiteDialect
+import org.babyfish.jimmer.sql.kt.KSqlClient
+import org.babyfish.jimmer.sql.kt.newKSqlClient
+import org.babyfish.jimmer.sql.runtime.ConnectionManager
+import org.babyfish.jimmer.sql.transaction.TxConnectionManager
 import javax.sql.DataSource
 
-
-@Configuration
 class DatabaseConfig {
-    @Bean
-    @ConfigurationProperties("spring.datasource.hikari")
+
     fun hikariConfig(
-        @Value($$"${spring.datasource.url}") jdbcUrl: String,
-        @Value($$"${spring.datasource.password}") password: String,
-        @Value($$"${spring.datasource.username}") user: String
+        jdbcUrl: String,
+        password: String,
+        user: String
     ): HikariConfig {
         return HikariConfig().apply {
             this.jdbcUrl = jdbcUrl
             this.password = password
             this.username = user
+            this.driverClassName = "org.postgresql.Driver"
             if (isSqlite(jdbcUrl)) {
                 this.maximumPoolSize = 1
+                this.driverClassName = "org.sqlite.JDBC"
             }
         }
     }
 
-    @Bean
+    fun sqlClient(dataSource: DataSource): KSqlClient {
+        return newKSqlClient {
+            setDialect(
+                when (getDialect(dataSource)) {
+                    "sqlite" -> SQLiteDialect()
+                    "postgres" -> PostgresDialect()
+                    else -> PostgresDialect()
+                }
+            )
+            setConnectionManager(ConnectionManager.simpleConnectionManager(dataSource))
+        }
+    }
+
     fun hikariDataSource(hikariConfig: HikariConfig): DataSource {
         return HikariDataSource(hikariConfig)
     }
 
-    @Bean
-    fun dslContext(dataSource: DataSource): DSLContext {
-        return DSL.using(dataSource, getDialect(dataSource))
-    }
-
-    private fun getDialect(dataSource: DataSource): SQLDialect {
-        val jdbcUrl = (dataSource as HikariDataSource).jdbcUrl
-
-        var dialect = SQLDialect.POSTGRES
-        if (isSqlite(jdbcUrl)) {
-            dialect = SQLDialect.SQLITE
-        }
-        return dialect
-    }
-
-    @Bean
     fun liquibase(dataSource: DataSource): Liquibase {
         dataSource.connection.use {
             val database = DatabaseFactory.getInstance()
@@ -63,7 +57,7 @@ class DatabaseConfig {
 
             val dialect = getDialect(dataSource)
 
-            val file = if (SQLDialect.SQLITE == dialect) {
+            val file = if ("sqlite" == dialect) {
                 "sqlite"
             } else {
                 "postgresql"
@@ -79,6 +73,16 @@ class DatabaseConfig {
 
             return liquibase
         }
+    }
+
+    private fun getDialect(dataSource: DataSource): String {
+        val jdbcUrl = (dataSource as HikariDataSource).jdbcUrl
+
+        var dialect = "postgres"
+        if (isSqlite(jdbcUrl)) {
+            dialect = "sqlite"
+        }
+        return dialect
     }
 
     private fun isSqlite(jdbcUrl: String): Boolean {

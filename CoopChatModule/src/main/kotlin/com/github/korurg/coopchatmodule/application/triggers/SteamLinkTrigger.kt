@@ -2,7 +2,7 @@ package com.github.korurg.coopchatmodule.application.triggers
 
 import com.github.korurg.coopchatmodule.application.GameService
 import com.github.korurg.coopchatmodule.domain.SaveSteamAppCommand
-import com.github.korurg.coopchatmodule.domain.id.SteamAppId
+import com.github.korurg.coopchatmodule.domain.id.SteamAppExternalId
 import com.github.korurg.telegrambot.application.TelegramBotReceiveMessageTrigger
 import com.github.korurg.telegrambot.domain.TelegramMessage
 
@@ -26,7 +26,7 @@ class SteamLinkTrigger(
             gameService.saveSteamApp(
                 SaveSteamAppCommand(
                     message = message,
-                    steamId = SteamAppId(steamAppId),
+                    steamId = SteamAppExternalId(steamAppId),
                 )
             )
         }

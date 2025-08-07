@@ -4,7 +4,7 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":TelegramBotCore"))
+    api(project(":TelegramBotCore"))
     testImplementation(kotlin("test"))
 }
 

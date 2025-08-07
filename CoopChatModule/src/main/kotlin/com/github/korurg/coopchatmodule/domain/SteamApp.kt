@@ -1,13 +1,13 @@
 package com.github.korurg.coopchatmodule.domain
 
 import com.github.korurg.coopchatmodule.domain.enums.SteamAppFillState
-import com.github.korurg.coopchatmodule.domain.id.SteamAppId
+import com.github.korurg.coopchatmodule.domain.id.SteamAppExternalId
 import com.github.korurg.coopchatmodule.domain.id.SteamAppInternalId
 import java.time.OffsetDateTime
 
 data class SteamApp(
     val id: SteamAppInternalId? = null,
-    val steamId: SteamAppId,
+    val steamId: SteamAppExternalId,
     val name: String,
     val type: String?,
     val categories: List<SteamAppCategory> = listOf(),

@@ -5,24 +5,23 @@ import com.github.korurg.coopchatmodule.domain.SteamApp
 import com.github.korurg.coopchatmodule.domain.SteamAppCategory
 import com.github.korurg.coopchatmodule.domain.SteamAppPrice
 import com.github.korurg.coopchatmodule.domain.enums.SteamAppFillState
-import com.github.korurg.coopchatmodule.domain.id.SteamAppId
-import com.github.korurg.coopchatmodule.domain.id.SteamCategoryId
+import com.github.korurg.coopchatmodule.domain.id.SteamAppExternalId
+import com.github.korurg.coopchatmodule.domain.id.SteamCategoryExternalId
 import com.github.korurg.ktsteam.KtSteamClient
 import com.github.korurg.ktsteam.dto.AppDetail
 import com.github.korurg.ktsteam.dto.AppDetailResult
 import com.github.korurg.ktsteam.dto.AppId
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.runBlocking
-import org.springframework.stereotype.Component
 import java.time.OffsetDateTime
 
-@Component
+
 class SteamAppAdapter(
     private val ktSteamClient: KtSteamClient,
 ) : SteamAppProviderPort {
     private val logger = KotlinLogging.logger {}
 
-    override fun findSteamAppBySteamId(steamId: SteamAppId): SteamApp? {
+    override fun findSteamAppBySteamId(steamId: SteamAppExternalId): SteamApp? {
         val appDetailResult = runBlocking {
             ktSteamClient.steamAppDetails().getAppDetail(AppId(steamId.value))
         }
@@ -31,6 +30,7 @@ class SteamAppAdapter(
             is AppDetailResult.Failed -> {
                 null
             }
+
             is AppDetailResult.Success -> {
                 toSteamApp(steamId, appDetailResult.appDetail)
             }
@@ -39,7 +39,7 @@ class SteamAppAdapter(
     //TODO: get version
 
     private fun toSteamApp(
-        steamId: SteamAppId,
+        steamId: SteamAppExternalId,
         appDetail: AppDetail
     ): SteamApp = SteamApp(
         steamId = steamId,
@@ -51,7 +51,7 @@ class SteamAppAdapter(
         shortDescription = appDetail.shortDescription,
         categories = appDetail.categories.map {
             SteamAppCategory(
-                steamCategoryId = SteamCategoryId(it.id),
+                steamId = SteamCategoryExternalId(it.id),
                 description = it.description
             )
         },

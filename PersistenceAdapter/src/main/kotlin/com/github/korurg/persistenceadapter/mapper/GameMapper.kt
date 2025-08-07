@@ -4,121 +4,100 @@ import com.github.korurg.coopchatmodule.domain.Game
 import com.github.korurg.coopchatmodule.domain.SteamApp
 import com.github.korurg.coopchatmodule.domain.SteamAppCategory
 import com.github.korurg.coopchatmodule.domain.SteamAppPrice
+import com.github.korurg.coopchatmodule.domain.enums.GameState
 import com.github.korurg.coopchatmodule.domain.enums.SteamAppFillState
-import com.github.korurg.coopchatmodule.domain.id.GameId
-import com.github.korurg.coopchatmodule.domain.id.SteamAppId
-import com.github.korurg.coopchatmodule.domain.id.SteamAppInternalId
-import com.github.korurg.coopchatmodule.domain.id.SteamAppPriceId
-import com.github.korurg.persistence.entity.tables.records.GameRecord
-import com.github.korurg.persistence.entity.tables.records.SteamAppCategoryRecord
-import com.github.korurg.persistence.entity.tables.records.SteamAppPriceRecord
-import com.github.korurg.persistence.entity.tables.records.SteamAppRecord
-import io.mcarle.konvert.api.Konvert
-import io.mcarle.konvert.api.Konverter
-import io.mcarle.konvert.api.Mapping
-import io.mcarle.konvert.injector.spring.KComponent
+import com.github.korurg.coopchatmodule.domain.id.SteamCategoryExternalId
+import com.github.korurg.coopchatmodule.domain.id.SteamCategoryInternalId
+import com.github.korurg.persistenceadapter.domain.entity.GameEntity
+import com.github.korurg.persistenceadapter.domain.entity.SteamAppCategoryEntity
+import com.github.korurg.persistenceadapter.domain.entity.SteamAppEntity
+import com.github.korurg.persistenceadapter.domain.entity.SteamAppPriceEntity
 
-@Konverter
-@KComponent
-interface GameMapper {
+fun GameEntity.toGame(): Game = Game(
+    id = this.id.toGameId(),
+    name = this.name,
+    maxPlayers = this.maxPlayers,
+    minPlayers = this.minPlayers,
+    watchPriceChanges = true,
+    watchPurchases = true,
+    watchForUpdates = true,
+    gameState = GameState.NEW,
+    steamApp = this.steamApp?.toSteamApp(),
+    updated = this.updated,
+    created = this.created,
+)
 
-    fun toGameRecord(game: Game): GameRecord
+fun SteamAppEntity.toSteamApp(): SteamApp = SteamApp(
+    id = this.id.toSteamAppInternalId(),
+    steamId = this.id.toSteamAppExternalId(),
+    name = this.name,
+    type = this.type,
+    categories = this.categories.map { categoryEntity -> categoryEntity.toSteamAppCategory() },
+    currentPrice = this.currentPrice?.toSteamAppPrice(),
+    fillState = SteamAppFillState.valueOf(this.fillState),
+    version = this.version,
+    description = this.description,
+    shortDescription = this.shortDescription,
+    updated = this.updated,
+    created = this.created,
+)
 
-    @Konvert(
-        mappings = [
-            Mapping(target = "watchPriceChanges", constant = "true"),
-            Mapping(target = "watchPurchases", constant = "true"),
-            Mapping(target = "watchForUpdates", constant = "true"),
-            Mapping(target = "gameState", constant = "com.github.korurg.coopchatmodule.domain.enums.GameState.NEW"),
-        ]
-    )
-    fun toGame(gameRecord: GameRecord): Game
+fun SteamAppPriceEntity.toSteamAppPrice(): SteamAppPrice = SteamAppPrice(
+    id = this.id.toSteamAppPriceId(),
+    currency = this.currency,
+    initial = this.initial,
+    final = this.final,
+    discountPercent = this.discountPercent,
+    initialFormatted = this.initialFormatted,
+    finalFormatted = this.finalFormatted,
+    updated = this.updated,
+    created = this.created,
+)
 
-    @Konvert(
-        mappings = [
-            Mapping(target = "steamId", expression = "it.steamId.value") //bug
-        ]
-    )
-    fun toSteamAppRecord(steamApp: SteamApp): SteamAppRecord
+fun SteamAppCategoryEntity.toSteamAppCategory(): SteamAppCategory = SteamAppCategory(
+    id = SteamCategoryInternalId(this.id),
+    steamId = SteamCategoryExternalId(this.steamId),
+    description = this.description,
+    updated = this.updated,
+    created = this.created
+)
 
-    @Konvert(
-        mappings = [
-            Mapping(
-                target = "steamId",
-                expression = "com.github.korurg.coopchatmodule.domain.id.SteamAppId(it.steamId)"
-            )  //also bug
-        ]
-    )
-    fun toSteamApp(steamAppRecord: SteamAppRecord): SteamApp
 
-    fun gameIdToLong(value: GameId?): Long? {
-        return value?.value
+fun SteamApp.toSteamAppEntity(
+    existedSteamAppEntity: SteamAppEntity? = null,
+    categoryEntities: List<SteamAppCategoryEntity>? = null,
+): SteamAppEntity = SteamAppEntity {
+    created = this@toSteamAppEntity.created
+    existedSteamAppEntity?.let {
+//        id = it.id
+        created = it.created
     }
+    name = this@toSteamAppEntity.name
+    type = this@toSteamAppEntity.type
+    steamId = this@toSteamAppEntity.steamId.value
+    version = this@toSteamAppEntity.version
+    description = this@toSteamAppEntity.description
+    shortDescription = this@toSteamAppEntity.shortDescription
+    fillState = this@toSteamAppEntity.fillState.name
+    currentPrice = this@toSteamAppEntity.currentPrice?.toSteamAppPriceEntity()
+    categories = categoryEntities ?: this@toSteamAppEntity.categories.map { it.toSteamAppCategoryEntity() }
+    updated = this@toSteamAppEntity.updated
+}
 
-    fun longToGameId(value: Long?): GameId? {
-        return value?.let { GameId(it) }
-    }
+fun SteamAppPrice.toSteamAppPriceEntity(): SteamAppPriceEntity = SteamAppPriceEntity {
+    currency = this@toSteamAppPriceEntity.currency
+    initialFormatted = this@toSteamAppPriceEntity.initialFormatted
+    finalFormatted = this@toSteamAppPriceEntity.finalFormatted
+    final = this@toSteamAppPriceEntity.final
+    initial = this@toSteamAppPriceEntity.initial
+    discountPercent = this@toSteamAppPriceEntity.initial
+    updated = this@toSteamAppPriceEntity.updated
+    created = this@toSteamAppPriceEntity.created
+}
 
-    fun steamAppInternalIdToLong(value: SteamAppInternalId?): Long? {
-        return value?.value
-    }
-
-    fun longToSteamAppInternalId(value: Long?): SteamAppInternalId? {
-        return value?.let { SteamAppInternalId(it) }
-    }
-
-    fun steamAppIdToLong(value: SteamAppId?): Long? {
-        return value?.value
-    }
-
-    fun stringToFillState(value: String): SteamAppFillState {
-        return SteamAppFillState.valueOf(value)
-    }
-
-    @Konvert(
-        mappings = [
-            Mapping(target = "steamAppId", expression = "it.steamAppId!!.value"),
-        ]
-    )
-    fun toSteamAppPriceRecord(steamAppPrice: SteamAppPrice): SteamAppPriceRecord
-
-    fun longToSteamAppPriceId(value: Long?): SteamAppPriceId? {
-        return value?.let { SteamAppPriceId(it) }
-    }
-
-    fun steamAppPriceIdToLong(value: SteamAppPriceId?): Long? {
-        return value?.value
-    }
-
-    fun toSteamAppPrice(steamAppPriceRecord: SteamAppPriceRecord): SteamAppPrice
-
-    @Konvert(
-        mappings = [
-            Mapping(
-                target = "steamCategoryId",
-                expression = "com.github.korurg.coopchatmodule.domain.id.SteamCategoryId(it.steamId)"
-            ),
-            Mapping(
-                target = "id",
-                expression = "com.github.korurg.coopchatmodule.domain.id.SteamCategoryInternalId(it.id!!)"
-            ),
-        ]
-    )
-    fun toSteamAppCategory(stamAppCategoryRecord: SteamAppCategoryRecord): SteamAppCategory
-
-    @Konvert(
-        mappings = [
-            Mapping(
-                target = "id",
-                expression = "it.id?.value"
-            ),
-            Mapping(
-                target = "steamId",
-                expression = "it.steamCategoryId.value"
-            ),
-        ]
-    )
-    fun toSteamAppCategoryRecord(steamAppCategory: SteamAppCategory): SteamAppCategoryRecord
-
-
+fun SteamAppCategory.toSteamAppCategoryEntity(): SteamAppCategoryEntity = SteamAppCategoryEntity {
+    steamId = this@toSteamAppCategoryEntity.steamId.value
+    description = this@toSteamAppCategoryEntity.description
+    updated = this@toSteamAppCategoryEntity.updated
+    created = this@toSteamAppCategoryEntity.created
 }

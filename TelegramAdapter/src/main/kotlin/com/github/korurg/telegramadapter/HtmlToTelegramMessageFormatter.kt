@@ -1,8 +1,6 @@
 package com.github.korurg.telegramadapter
 
-import org.springframework.stereotype.Component
 
-@Component
 class HtmlToTelegramMessageFormatter {
 
     private val replaces = mapOf(

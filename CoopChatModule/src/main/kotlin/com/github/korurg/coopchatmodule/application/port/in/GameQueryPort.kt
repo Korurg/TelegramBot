@@ -1,11 +1,10 @@
 package com.github.korurg.coopchatmodule.application.port.`in`
 
 import com.github.korurg.coopchatmodule.domain.Game
-import com.github.korurg.coopchatmodule.domain.SteamApp
-import com.github.korurg.coopchatmodule.domain.id.SteamAppId
+import com.github.korurg.coopchatmodule.domain.id.SteamAppExternalId
 
 interface GameQueryPort {
 
-    suspend fun findGameBySteamId(steamId: SteamAppId): Game?
+    suspend fun findGameBySteamId(steamId: SteamAppExternalId): Game?
 
 }

@@ -1,12 +1,12 @@
 package com.github.korurg.steamadapter.mapper
 
-import com.github.korurg.coopchatmodule.domain.id.SteamAppId
+import com.github.korurg.coopchatmodule.domain.id.SteamAppExternalId
 import com.github.korurg.ktsteam.dto.AppId
 
-fun AppId.toSteamAppId(): SteamAppId {
-    return SteamAppId(this@toSteamAppId.value)
+fun AppId.toSteamAppId(): SteamAppExternalId {
+    return SteamAppExternalId(this@toSteamAppId.value)
 }
 
-fun SteamAppId.toAppId(): AppId {
+fun SteamAppExternalId.toAppId(): AppId {
     return AppId(this@toAppId.value)
 }
