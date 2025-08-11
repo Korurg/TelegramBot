@@ -43,6 +43,7 @@ class DatabaseConfig {
                 }
             )
             setConnectionManager(ConnectionManager.simpleConnectionManager(dataSource))
+
         }
     }
 

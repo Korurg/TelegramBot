@@ -5,5 +5,11 @@ import com.github.korurg.telegrambot.application.port.`in`.TelegramMessageReceiv
 import org.koin.dsl.module
 
 val telegramBotCoreModule = module {
-    single(createdAtStart = true) { TelegramBotService(getAll(), get(), get()) as TelegramMessageReceiveUseCase }
+    single(createdAtStart = true) {
+        TelegramBotService(
+            getAll(),
+            get(),
+            get()
+        ) as TelegramMessageReceiveUseCase
+    }
 }

@@ -17,7 +17,7 @@ coroutines = { prefer = "1.10.2" }
 konverter = { prefer = "4.1.2" }
 hibernate = { prefer = "6.6.18.Final" }
 queryDsl = { prefer = "5.1.0" }
-jimmer = "0.9.102"
+jimmer = "0.9.105"
 koin = "4.1.0"
 #plugins
 springPlugin = "2.2.0"
