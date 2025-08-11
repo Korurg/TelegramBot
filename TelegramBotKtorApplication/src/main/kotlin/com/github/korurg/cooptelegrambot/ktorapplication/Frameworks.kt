@@ -11,10 +11,11 @@ import org.koin.fileProperties
 import org.koin.ktor.plugin.Koin
 import org.koin.logger.slf4jLogger
 
-fun Application.configureFrameworks() {
+fun Application.configureFrameworks(properties: Map<String, Any>) {
     install(Koin) {
         fileProperties()
         environmentProperties()
+        properties(properties)
         slf4jLogger()
         modules(
             persistenceAdapterModule,

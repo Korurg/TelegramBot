@@ -1,15 +1,9 @@
-import org.springframework.boot.gradle.plugin.SpringBootPlugin
-import org.springframework.boot.gradle.tasks.bundling.BootJar
-
 plugins {
     alias(libs.plugins.gitVersion)
 
     alias(libs.plugins.jvm) apply false
-    alias(libs.plugins.spring.plugin) apply false
-    alias(libs.plugins.spring.springBoot) apply false
     alias(libs.plugins.foojayResolverConvention) apply false
     alias(libs.plugins.spring.dependencyManagment) apply false
-    alias(libs.plugins.jooq) apply false
     alias(libs.plugins.kapt) apply false
 }
 
@@ -20,18 +14,31 @@ val computedVersion = "$botVersion-${details.branchName.split("/").last()}-${det
 
 extra["computedVersion"] = computedVersion
 
-allprojects{
-    group = "com.github.korurg"
+subprojects {
+    group = "com.github.korurg.cooptelegrambot"
     version = computedVersion
     println("DEBUG: $computedVersion")
 
-    tasks.withType<Test>{
+    tasks.withType<Test> {
         useJUnitPlatform()
+        doFirst {
+            println("Classpath for tests:")
+            classpath.files.forEach { println(it) }
+        }
     }
 
     plugins.withType<org.jetbrains.kotlin.gradle.plugin.KotlinPluginWrapper> {
         configure<org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension> {
             jvmToolchain(21)
         }
+    }
+
+    plugins.withId("org.jetbrains.kotlin.jvm") {
+        dependencies {
+            //TODO:  to libs
+            add("testImplementation", "org.assertj:assertj-core:3.27.4")
+            add("testImplementation", kotlin("test"))
+        }
+
     }
 }

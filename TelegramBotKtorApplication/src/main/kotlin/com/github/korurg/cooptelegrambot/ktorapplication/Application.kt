@@ -7,8 +7,8 @@ fun main(args: Array<String>) {
     EngineMain.main(args)
 }
 
-fun Application.module() {
+fun Application.module(properties: Map<String, Any> = mapOf()) {
     configureSerialization()
-    configureFrameworks()
+    configureFrameworks(properties)
     configureRouting()
 }

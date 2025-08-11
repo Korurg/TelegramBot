@@ -16,17 +16,19 @@ dependencyResolutionManagement {
 
 rootProject.name = "telegram-bot"
 
-include("TelegramBotSpringApplication")
 include("TelegramBotKtorApplication")
+
 include("CoopChatModule")
+include("CoopChatModuleKoinModule")
+
 include("TelegramBotCore")
-include("TelegramAdapter")
-include("SteamAdapter")
+include("TelegramBotCoreKoinModule")
 
 include("PersistenceAdapter")
 include("PersistenceAdapterKoinModule")
 
+include("TelegramAdapter")
 include("TelegramAdapterKoinModule")
+
+include("SteamAdapter")
 include("SteamAdapterKoinModule")
-include("CoopChatModuleKoinModule")
-include("TelegramBotCoreKoinModule")
