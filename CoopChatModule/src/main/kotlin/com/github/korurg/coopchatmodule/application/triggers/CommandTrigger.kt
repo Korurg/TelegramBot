@@ -1,23 +1,20 @@
 package com.github.korurg.coopchatmodule.application.triggers
 
 import com.github.korurg.coopchatmodule.application.CommandParserService
-import com.github.korurg.coopchatmodule.application.GameService
-import com.github.korurg.coopchatmodule.config.Commands
-import com.github.korurg.coopchatmodule.domain.Game
-import com.github.korurg.coopchatmodule.domain.enums.GameState
+import com.github.korurg.coopchatmodule.application.commands.CommandHandler
 import com.github.korurg.telegrambot.application.TelegramBotReceiveMessageTrigger
 import com.github.korurg.telegrambot.application.port.out.TelegramMessageSendPort
 import com.github.korurg.telegrambot.domain.TelegramMessage
 import com.github.korurg.telegrambot.domain.TelegramSendMessageCommand
 import io.github.oshai.kotlinlogging.KotlinLogging
-import java.time.OffsetDateTime
 
 class CommandTrigger(
     private val commandParserService: CommandParserService,
     private val telegramMessageSendPort: TelegramMessageSendPort,
-    private val gameService: GameService
+    private val commandHandlers: List<CommandHandler>,
 ) : TelegramBotReceiveMessageTrigger {
     private val logger = KotlinLogging.logger {}
+    private val commandHandlersMap = commandHandlers.associateBy { it.getCommand() }
 
     override suspend fun handleMessage(message: TelegramMessage) {
         message.text?.let { messageText ->
@@ -25,24 +22,12 @@ class CommandTrigger(
 
             val command = commandParserService.parse(messageText)
 
-            //TODO: rewrite
             try {
-                when (command.command) {
-                    Commands.GAME_ADD -> gameService.saveGame(
-                        Game(
-                            name = requireNotNull(command.argument) { "game name is required" },
-                            maxPlayers = 4,
-                            minPlayers = 4,
-                            watchPurchases = true,
-                            watchPriceChanges = true,
-                            watchForUpdates = true,
-                            updated = OffsetDateTime.now(),
-                            created = OffsetDateTime.now(),
-                            gameState = GameState.NEW
-                        )
-                    )
-
-                    else -> telegramMessageSendPort.sendMessage(
+                val handler = commandHandlersMap[command.command]
+                if (handler != null) {
+                    handler.handle(command, message)
+                } else {
+                    telegramMessageSendPort.sendMessage(
                         TelegramSendMessageCommand(
                             chatId = message.chat.telegramId,
                             text = "Unknown command"

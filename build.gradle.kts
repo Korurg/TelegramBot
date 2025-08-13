@@ -38,6 +38,7 @@ subprojects {
             //TODO:  to libs
             add("testImplementation", "org.assertj:assertj-core:3.27.4")
             add("testImplementation", kotlin("test"))
+            add("testImplementation", "org.mockito:mockito-core:5.18.0")
         }
 
     }

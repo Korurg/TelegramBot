@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":TelegramAdapter"))
+    api(project(":TelegramAdapter"))
     implementation(libs.koin.coreJvm)
 
     testImplementation(kotlin("test"))

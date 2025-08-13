@@ -1,11 +1,10 @@
 package com.github.korurg.persistenceadapter.domain.entity
 
 import org.babyfish.jimmer.sql.*
-import java.time.OffsetDateTime
 
 @Entity
 @Table(name = "telegram_chat")
-interface TelegramChatEntity {
+interface TelegramChatEntity : AuditableEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,10 +19,4 @@ interface TelegramChatEntity {
 
     @Column(name = "type")
     val type: String
-
-    @Column(name = "updated")
-    val updated: OffsetDateTime
-
-    @Column(name = "created")
-    val created: OffsetDateTime
 }

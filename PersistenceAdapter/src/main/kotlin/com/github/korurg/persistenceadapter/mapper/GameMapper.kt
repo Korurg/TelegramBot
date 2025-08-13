@@ -27,9 +27,19 @@ fun GameEntity.toGame(): Game = Game(
     created = this.created,
 )
 
+fun Game.toGameEntity()= GameEntity {
+    this@toGameEntity.id?.let {
+        id = it.value
+    }
+    name = this@toGameEntity.name
+    maxPlayers = this@toGameEntity.maxPlayers
+    minPlayers = this@toGameEntity.minPlayers
+    steamApp = this@toGameEntity.steamApp?.toSteamAppEntity()
+}
+
 fun SteamAppEntity.toSteamApp(): SteamApp = SteamApp(
     id = this.id.toSteamAppInternalId(),
-    steamId = this.id.toSteamAppExternalId(),
+    steamId = this.steamId.toSteamAppExternalId(),
     name = this.name,
     type = this.type,
     categories = this.categories.map { categoryEntity -> categoryEntity.toSteamAppCategory() },
@@ -62,15 +72,10 @@ fun SteamAppCategoryEntity.toSteamAppCategory(): SteamAppCategory = SteamAppCate
     created = this.created
 )
 
-
-fun SteamApp.toSteamAppEntity(
-    existedSteamAppEntity: SteamAppEntity? = null,
-    categoryEntities: List<SteamAppCategoryEntity>? = null,
-): SteamAppEntity = SteamAppEntity {
+fun SteamApp.toSteamAppEntity(): SteamAppEntity = SteamAppEntity {
     created = this@toSteamAppEntity.created
-    existedSteamAppEntity?.let {
-//        id = it.id
-        created = it.created
+    this@toSteamAppEntity.id?.let {
+        id = it.value
     }
     name = this@toSteamAppEntity.name
     type = this@toSteamAppEntity.type
@@ -80,7 +85,7 @@ fun SteamApp.toSteamAppEntity(
     shortDescription = this@toSteamAppEntity.shortDescription
     fillState = this@toSteamAppEntity.fillState.name
     currentPrice = this@toSteamAppEntity.currentPrice?.toSteamAppPriceEntity()
-    categories = categoryEntities ?: this@toSteamAppEntity.categories.map { it.toSteamAppCategoryEntity() }
+    categories = this@toSteamAppEntity.categories.map { it.toSteamAppCategoryEntity() }
     updated = this@toSteamAppEntity.updated
 }
 
@@ -90,7 +95,7 @@ fun SteamAppPrice.toSteamAppPriceEntity(): SteamAppPriceEntity = SteamAppPriceEn
     finalFormatted = this@toSteamAppPriceEntity.finalFormatted
     final = this@toSteamAppPriceEntity.final
     initial = this@toSteamAppPriceEntity.initial
-    discountPercent = this@toSteamAppPriceEntity.initial
+    discountPercent = this@toSteamAppPriceEntity.discountPercent
     updated = this@toSteamAppPriceEntity.updated
     created = this@toSteamAppPriceEntity.created
 }

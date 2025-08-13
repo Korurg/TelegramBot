@@ -4,7 +4,7 @@ plugins {
 
 
 dependencies {
-    implementation(project(":SteamAdapter"))
+    api(project(":SteamAdapter"))
     implementation(libs.koin.coreJvm)
 
     testImplementation(kotlin("test"))

@@ -27,4 +27,5 @@ dependencies {
     testImplementation("org.testcontainers:testcontainers:1.21.3")
     testImplementation("org.testcontainers:postgresql:1.21.3")
     testImplementation("io.ktor:ktor-server-test-host:3.2.3")
+    testImplementation("io.insert-koin:koin-test:3.5.6")
 }

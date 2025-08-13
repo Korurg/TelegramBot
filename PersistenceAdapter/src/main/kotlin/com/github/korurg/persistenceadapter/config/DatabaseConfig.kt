@@ -6,12 +6,13 @@ import liquibase.Liquibase
 import liquibase.database.DatabaseFactory
 import liquibase.database.jvm.JdbcConnection
 import liquibase.resource.ClassLoaderResourceAccessor
+import org.babyfish.jimmer.Draft
+import org.babyfish.jimmer.sql.DraftInterceptor
 import org.babyfish.jimmer.sql.dialect.PostgresDialect
 import org.babyfish.jimmer.sql.dialect.SQLiteDialect
 import org.babyfish.jimmer.sql.kt.KSqlClient
 import org.babyfish.jimmer.sql.kt.newKSqlClient
 import org.babyfish.jimmer.sql.runtime.ConnectionManager
-import org.babyfish.jimmer.sql.transaction.TxConnectionManager
 import javax.sql.DataSource
 
 class DatabaseConfig {
@@ -33,7 +34,10 @@ class DatabaseConfig {
         }
     }
 
-    fun sqlClient(dataSource: DataSource): KSqlClient {
+    fun sqlClient(
+        dataSource: DataSource,
+        interceptors: Collection<DraftInterceptor<out Any, out Draft>>,
+    ): KSqlClient {
         return newKSqlClient {
             setDialect(
                 when (getDialect(dataSource)) {
@@ -43,8 +47,9 @@ class DatabaseConfig {
                 }
             )
             setConnectionManager(ConnectionManager.simpleConnectionManager(dataSource))
-
+            addDraftInterceptors(interceptors)
         }
+
     }
 
     fun hikariDataSource(hikariConfig: HikariConfig): DataSource {

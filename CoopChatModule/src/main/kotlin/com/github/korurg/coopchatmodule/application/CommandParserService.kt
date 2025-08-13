@@ -26,13 +26,17 @@ class CommandParserService {
             null
         }
 
-        val argument = text.replace("$commandPrefix ", "")
+        var argument = text.replace("$commandPrefix", "")
+
+        if (argument.startsWith(" ")) {
+            argument = argument.substring(1)
+        }
 
         return Command(
             command = command,
             botName = botName,
             params = mapOf(),
-            argument = argument
+            argument = argument.ifEmpty { null }
         )
     }
 }

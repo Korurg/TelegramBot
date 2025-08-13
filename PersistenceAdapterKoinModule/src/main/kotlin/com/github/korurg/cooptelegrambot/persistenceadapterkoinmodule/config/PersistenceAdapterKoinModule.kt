@@ -5,10 +5,15 @@ import com.github.korurg.coopchatmodule.application.port.out.GameCommandPort
 import com.github.korurg.persistenceadapter.adapter.`in`.GameAdapter
 import com.github.korurg.persistenceadapter.adapter.`in`.TelegramChatAdapter
 import com.github.korurg.persistenceadapter.adapter.`in`.TelegramUserAdapter
+import com.github.korurg.persistenceadapter.adapter.out.TelegramChatQueryAdapter
 import com.github.korurg.persistenceadapter.config.DatabaseConfig
+import com.github.korurg.persistenceadapter.config.interceptor.AuditableInterceptor
+import com.github.korurg.telegrambot.application.port.`in`.TelegramChatQueryPort
 import com.github.korurg.telegrambot.application.port.out.TelegramChatSavePort
 import com.github.korurg.telegrambot.application.port.out.TelegramUserSavePort
 import kotlinx.coroutines.Dispatchers
+import org.babyfish.jimmer.Draft
+import org.babyfish.jimmer.sql.DraftInterceptor
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
@@ -27,10 +32,19 @@ val persistenceAdapterModule = module {
     }
     single(createdAtStart = true) { get<DatabaseConfig>().hikariDataSource(get()) }
     single(createdAtStart = true) { get<DatabaseConfig>().liquibase(get()) }
-    single(createdAtStart = true) { get<DatabaseConfig>().sqlClient(get()) }
+    single(createdAtStart = true) { get<DatabaseConfig>().sqlClient(get(), getAll()) }
 
+    single<DraftInterceptor<out Any, out Draft>>(
+        named("auditableInterceptor"),
+        createdAtStart = true
+    ) { AuditableInterceptor() }
 
-    single(createdAtStart = true) { GameAdapter(get(), get(named(DEFAULT_DB_COROUTINE_SCOPE))) }
+    single(createdAtStart = true) {
+        GameAdapter(
+            get(),
+            get(named(DEFAULT_DB_COROUTINE_SCOPE))
+        )
+    }
     single { get<GameAdapter>() as GameCommandPort }
     single { get<GameAdapter>() as GameQueryPort }
 
@@ -46,6 +60,10 @@ val persistenceAdapterModule = module {
             get(),
             get(named(DEFAULT_DB_COROUTINE_SCOPE))
         ) as TelegramUserSavePort
+    }
+
+    single<TelegramChatQueryPort>(createdAtStart = true) {
+        TelegramChatQueryAdapter()
     }
 
 }

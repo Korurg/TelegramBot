@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":TelegramBotCore"))
+    api(project(":TelegramBotCore"))
     implementation(libs.koin.coreJvm)
 
     testImplementation(kotlin("test"))

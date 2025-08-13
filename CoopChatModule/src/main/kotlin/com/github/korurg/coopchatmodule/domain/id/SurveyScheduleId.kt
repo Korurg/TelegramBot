@@ -2,4 +2,4 @@ package com.github.korurg.coopchatmodule.domain.id
 
 
 @JvmInline
-value class PollDefferRuleId(val value: Long)
+value class SurveyScheduleId(val value: Long)

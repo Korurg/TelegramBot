@@ -41,5 +41,7 @@ class CommandParserServiceTests {
         val command = commandParserService.parse(commandText)
 
         assertThat(command.command).isEqualTo("poolstart")
+        assertThat(command.argument).isNull()
+        assertThat(command.botName).isNull()
     }
 }

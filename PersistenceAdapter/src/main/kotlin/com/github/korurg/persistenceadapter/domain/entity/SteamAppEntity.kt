@@ -1,11 +1,10 @@
 package com.github.korurg.persistenceadapter.domain.entity
 
 import org.babyfish.jimmer.sql.*
-import java.time.OffsetDateTime
 
 @Entity
 @Table(name = "steam_app")
-interface SteamAppEntity {
+interface SteamAppEntity : AuditableEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -46,11 +45,4 @@ interface SteamAppEntity {
 
     @OneToOne(mappedBy = "steamApp")
     val currentPrice: SteamAppPriceEntity?
-
-    @Column(name = "updated")
-    val updated: OffsetDateTime
-
-    @Column(name = "created")
-    val created: OffsetDateTime
-
 }
