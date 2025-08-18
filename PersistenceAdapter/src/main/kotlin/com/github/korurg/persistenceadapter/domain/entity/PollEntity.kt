@@ -11,15 +11,12 @@ interface PollEntity : AuditableEntity {
     @Column(name = "id")
     val id: Long
 
+    @Key
     @Column(name = "telegram_id")
-    val telegramId: Long
+    val telegramId: String
 
     @Column(name = "type")
     val type: String
-
-    @ManyToOne
-    @JoinColumn(name = "survey_id")
-    val survey: SurveyEntity
 
     @OneToMany(mappedBy = "poll")
     val answers: List<PollAnswerEntity>

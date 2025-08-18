@@ -9,6 +9,7 @@ import com.github.korurg.coopchatmodule.domain.enums.PollType
 import com.github.korurg.coopchatmodule.domain.enums.SurveyScheduleType
 import com.github.korurg.coopchatmodule.domain.enums.SurveyState
 import com.github.korurg.coopchatmodule.domain.id.PollAnswerId
+import com.github.korurg.coopchatmodule.domain.id.SurveyId
 import com.github.korurg.telegrambot.application.port.`in`.TelegramChatQueryPort
 import com.github.korurg.telegrambot.application.port.out.TelegramCommandPort
 import com.github.korurg.telegrambot.domain.TelegramStartPollCommand
@@ -16,6 +17,7 @@ import com.github.korurg.telegrambot.domain.id.ChatExternalId
 import com.github.korurg.telegrambot.domain.id.PollAnswerExternalId
 import java.time.*
 import java.time.format.DateTimeFormatter
+import java.util.UUID
 
 private const val DEFAULT_START_POLL_TIME = "0 17 * * *"
 private const val DEFAULT_TIMEZONE = "Europe/Moscow"
@@ -42,6 +44,7 @@ class SurveyService(
         val nowDate = LocalDate.now()
 
         val survey = Survey(
+            id = SurveyId.random(),
             state = SurveyState.ACTIVE,
             schedule = SurveySchedule(
                 startDate = nowDate,
@@ -51,8 +54,8 @@ class SurveyService(
                 timezone = DEFAULT_TIMEZONE,
             ),
             chat = telegramChat,
-            currentTimePoll = timePoll,
-            currentGamePoll = gamePoll,
+            timePoll = timePoll,
+            gamePoll = gamePoll,
             gameId = game?.id
         )
 

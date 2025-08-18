@@ -1,24 +1,17 @@
 package com.github.korurg.persistenceadapter.domain.entity
 
-import org.babyfish.jimmer.sql.Column
-import org.babyfish.jimmer.sql.Entity
-import org.babyfish.jimmer.sql.GeneratedValue
-import org.babyfish.jimmer.sql.GenerationType
-import org.babyfish.jimmer.sql.Id
-import org.babyfish.jimmer.sql.JoinColumn
-import org.babyfish.jimmer.sql.OneToOne
-import org.babyfish.jimmer.sql.Table
-import java.sql.Date
+import org.babyfish.jimmer.sql.*
 import java.time.LocalDate
 
 @Entity
 @Table(name = "survey_schedule")
-interface SurveyScheduleEntity {
+interface SurveyScheduleEntity : AuditableEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     val id: Long
 
+    @Key
     @OneToOne
     @JoinColumn(name = "survey_id")
     val survey: SurveyEntity

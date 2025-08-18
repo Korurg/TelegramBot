@@ -2,7 +2,15 @@ package com.github.korurg.cooptelegrambot
 
 import CoopChatModuleMessages
 import com.github.korurg.coopchatmodule.config.Commands
+import com.github.korurg.coopchatmodule.domain.Poll
+import com.github.korurg.coopchatmodule.domain.PollAnswer
+import com.github.korurg.coopchatmodule.domain.Survey
+import com.github.korurg.coopchatmodule.domain.SurveySchedule
 import com.github.korurg.coopchatmodule.domain.id.SteamAppExternalId
+import com.github.korurg.persistenceadapter.domain.entity.PollAnswerEntity
+import com.github.korurg.persistenceadapter.domain.entity.PollEntity
+import com.github.korurg.persistenceadapter.domain.entity.SurveyEntity
+import com.github.korurg.persistenceadapter.domain.entity.SurveyScheduleEntity
 import com.github.korurg.persistenceadapter.mapper.toGameEntity
 import com.github.korurg.telegrambot.domain.TelegramStartPollCommand
 import com.github.korurg.telegrambot.domain.id.PollExternalId
@@ -41,10 +49,10 @@ class StartPollTests : BaseTest() {
                 "[${game1Id}] ${game1.name}",
                 "[${game2Id}] ${game2.name}",
                 "[${game3Id}] ${game3.name}",
-            )
+            ),
+            isAnonymous = false,
         )
 
-        //TODO: to db
         val startTimePollCommand = TelegramStartPollCommand(
             chatId = defaultChatExternalId(),
             question = CoopChatModuleMessages.timePollQuestion(),
@@ -55,11 +63,12 @@ class StartPollTests : BaseTest() {
                 "20:00",
                 "19:30",
                 "19:00",
-            )
+            ),
+            isAnonymous = false,
         )
 
-        val gamePollId = PollExternalId(1L)
-        val timePollId = PollExternalId(2L)
+        val gamePollId = PollExternalId("1")
+        val timePollId = PollExternalId("2")
 
         coEvery { telegramBotOutAdapter.startPoll(startGamePollCommand) } returns gamePollId
         coEvery { telegramBotOutAdapter.startPoll(startTimePollCommand) } returns timePollId
@@ -69,10 +78,19 @@ class StartPollTests : BaseTest() {
         telegramMessageReceiveUseCase.receiveMessage(messageStartPoll)
 
 
+
+        //TODO: check in db polls
+
+
         //TODO: emulate users
 
         //then
         coVerify { telegramBotOutAdapter.startPoll(startGamePollCommand) }
         coVerify { telegramBotOutAdapter.startPoll(startTimePollCommand) }
+
+        assertThatTableRecordsCount(1, SurveyEntity::class, kSqlClient)
+        assertThatTableRecordsCount(1, SurveyScheduleEntity::class, kSqlClient)
+        assertThatTableRecordsCount(2, PollEntity::class, kSqlClient)
+        assertThatTableRecordsCount(9, PollAnswerEntity::class, kSqlClient)
     }
 }

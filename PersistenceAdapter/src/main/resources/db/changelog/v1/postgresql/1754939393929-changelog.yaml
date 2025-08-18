@@ -4,12 +4,41 @@ databaseChangeLog:
       author: korurg
       changes:
         - createTable:
-            tableName: survey
+            tableName: poll
             columns:
               - column:
                   name: id
                   type: bigint
                   autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: telegram_id
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: type
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated
+                  type: timestamptz
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created
+                  type: timestamptz
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: survey
+            columns:
+              - column:
+                  name: id
+                  type: uuid
                   constraints:
                     primaryKey: true
                     nullable: false
@@ -25,6 +54,19 @@ databaseChangeLog:
                     nullable: false
                     foreignKeyName: fk_chat_id
                     references: telegram_chat(id)
+              - column:
+                  name: game_poll_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_game_poll_id
+                    references: poll(id)
+              - column:
+                  name: time_poll_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_time_poll_id
+                    references: poll(id)
               - column:
                   name: updated
                   type: timestamptz
@@ -47,7 +89,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: survey_id
-                  type: bigint
+                  type: uuid
                   constraints:
                     foreignKeyName: fk_survey_id
                     references: survey(id)
@@ -69,44 +111,12 @@ databaseChangeLog:
                   name: skip_until
                   type: text
               - column:
-                  name: timezone
+                  name: type
                   type: text
                   constraints:
                     nullable: false
               - column:
-                  name: updated
-                  type: timestamptz
-                  constraints:
-                    nullable: false
-              - column:
-                  name: created
-                  type: timestamptz
-                  constraints:
-                    nullable: false
-        - createTable:
-            tableName: poll
-            columns:
-              - column:
-                  name: id
-                  type: bigint
-                  autoIncrement: true
-                  constraints:
-                    primaryKey: true
-                    nullable: false
-              - column:
-                  name: telegram_id
-                  type: bigint
-                  constraints:
-                    nullable: false
-              - column:
-                  name: survey_id
-                  type: bigint
-                  constraints:
-                    nullable: false
-                    foreignKeyName: fk_survey_id
-                    references: survey(id)
-              - column:
-                  name: type
+                  name: timezone
                   type: text
                   constraints:
                     nullable: false
@@ -125,13 +135,18 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: text
+                  type: uuid
                   constraints:
                     primaryKey: true
                     nullable: false
               - column:
                   name: answer
                   type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: telegram_id
+                  type: int
                   constraints:
                     nullable: false
               - column:

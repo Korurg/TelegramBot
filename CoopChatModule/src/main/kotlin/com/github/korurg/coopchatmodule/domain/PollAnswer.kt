@@ -7,7 +7,7 @@ import com.github.korurg.telegrambot.domain.id.PollAnswerExternalId
 import java.time.OffsetDateTime
 
 data class PollAnswer(
-    val id: PollAnswerId?,
+    val id: PollAnswerId,
     val pollAnswerId: PollAnswerExternalId,
     val answer: String,
     val type: AnswerType,

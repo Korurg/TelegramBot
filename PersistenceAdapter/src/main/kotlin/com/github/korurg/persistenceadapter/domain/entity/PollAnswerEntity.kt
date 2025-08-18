@@ -14,6 +14,9 @@ interface PollAnswerEntity {
     @Column(name = "id")
     val id: UUID
 
+    @Column(name = "telegram_id")
+    val telegramId: Int
+
     @Column(name = "answer")
     val answer: String
 
