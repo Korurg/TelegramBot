@@ -9,6 +9,8 @@ import com.github.korurg.coopchatmodule.application.commands.PollStartCommandHan
 import com.github.korurg.coopchatmodule.application.triggers.CommandTrigger
 import com.github.korurg.coopchatmodule.application.triggers.SteamLinkTrigger
 import com.github.korurg.telegrambot.application.TelegramBotReceiveMessageTrigger
+import org.koin.core.module.dsl.createdAtStart
+import org.koin.core.module.dsl.singleOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
@@ -26,7 +28,13 @@ val coopChatModule = module {
     ) { SteamLinkTrigger(get()) }
     single<CommandHandler>(named("gameAddCommandHandler"), createdAtStart = true) { GameAddCommandHandler(get()) }
     single<CommandHandler>(named("pollStartCommandHandler"), createdAtStart = true) { PollStartCommandHandler(get()) }
-    single(createdAtStart = true) { CommandParserService() }
-    single(createdAtStart = true) { SurveyService(get(), get(), get()) }
-    single(createdAtStart = true) { GameService(get(), get(), get(), get()) }
+    singleOf(::CommandParserService){
+        createdAtStart()
+    }
+    singleOf(::SurveyService){
+        createdAtStart()
+    }
+    singleOf(::GameService){
+        createdAtStart()
+    }
 }

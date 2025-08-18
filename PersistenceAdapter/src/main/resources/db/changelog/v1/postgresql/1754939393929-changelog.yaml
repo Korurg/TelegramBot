@@ -125,8 +125,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigint
-                  autoIncrement: true
+                  type: text
                   constraints:
                     primaryKey: true
                     nullable: false
@@ -148,5 +147,11 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: data
-                  type: text
+                  name: game_id_answer
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_game_id_answer
+                    references: game(id)
+              - column:
+                  name: time_answer
+                  type: timestamptz

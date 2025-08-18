@@ -6,10 +6,10 @@ import com.github.korurg.telegrambot.domain.id.PollInternalId
 import java.time.OffsetDateTime
 
 data class Poll(
-    val id: PollInternalId?,
+    val id: PollInternalId? = null,
     val telegramId: PollExternalId,
     val type: PollType,
     val answers: List<PollAnswer>,
-    val updated: OffsetDateTime,
-    val created: OffsetDateTime,
+    val updated: OffsetDateTime = OffsetDateTime.now(),
+    val created: OffsetDateTime = OffsetDateTime.now(),
 )

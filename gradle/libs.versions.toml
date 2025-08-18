@@ -3,33 +3,26 @@ reflections = { prefer = "0.10.2" }
 postgresql = { prefer = "42.7.7" }
 sqlite = { prefer = "3.50.1.0" }
 hikari = { prefer = "6.3.0" }
-jooq = { prefer = "3.19.24" }
 telegram-bot = { prefer = "6.3.0" }
 liquibase = { prefer = "4.32.0" }
-springboot = "3.5.3"
-springdata = "3.5.2"
 logging = { prefer = "7.0.7" }
 logback = { prefer = "1.5.18" }
 slf4jApi = { prefer = "2.0.17" }
 ktsteam = { prefer = "1.0.0" }
-mapstruct = { prefer = "1.6.3" }
 coroutines = { prefer = "1.10.2" }
 konverter = { prefer = "4.1.2" }
-hibernate = { prefer = "6.6.18.Final" }
-queryDsl = { prefer = "5.1.0" }
-jimmer = "0.9.105"
+jimmer = "0.9.106"
 koin = "3.5.6"
+i18n4k = "0.11.0"
 #plugins
-springPlugin = "2.2.0"
 jvm = "2.2.0"
 kapt = "2.2.0"
-jooqPlugin = "8.2"
 foojayResolverConvention = "0.8.0"
 gitVersion = "3.4.0"
-springDependencyManagment = "1.1.7"
 ksp = "2.2.0-2.0.2"
 
 [libraries]
+i18n4k-jvm = { module = "de.comahe.i18n4k:i18n4k-core-jvm", version.ref = "i18n4k" }
 reflections = { module = "org.reflections:reflections", version.ref = "reflections" }
 postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
 sqlite = { module = "org.xerial:sqlite-jdbc", version.ref = "sqlite" }
@@ -42,34 +35,23 @@ jimmer-sql =  { module = "org.babyfish.jimmer:jimmer-sql", version.ref = "jimmer
 jimmer-sqlKotlin =  { module = "org.babyfish.jimmer:jimmer-sql-kotlin", version.ref = "jimmer" }
 liquibase = { module = "org.liquibase:liquibase-core", version.ref = "liquibase" }
 telegram-bot = { module = "com.github.kotlin-telegram-bot:kotlin-telegram-bot", version.ref = "telegram-bot" }
-springboot-starter = { module = "org.springframework.boot:spring-boot-starter", version.ref = "springboot" }
-springboot-configurationProcessor = { module = "org.springframework.boot:spring-boot-configuration-processor", version.ref = "springboot" }
 logging = { module = "io.github.oshai:kotlin-logging-jvm", version.ref = "logging" }
 logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 slf4jApi = { module = "org.slf4j:slf4j-api", version.ref = "slf4jApi" }
 ktsteam = { module = "com.github.korurg:KtSteam", version.ref = "ktsteam" }
-mapstruct-core = { module = "org.mapstruct:mapstruct", version.ref = "mapstruct" }
-mapstruct-processor = { module = "org.mapstruct:mapstruct-processor", version.ref = "mapstruct" }
 coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm", version.ref = "coroutines" }
 konverter-api = { module = "io.mcarle:konvert-api", version.ref = "konverter" }
 konverter-processor = { module = "io.mcarle:konvert", version.ref = "konverter" }
-konverter-springInjector = { module = "io.mcarle:konvert-spring-injector", version.ref = "konverter" }
 konverter-koinInjector = { module = "io.mcarle:konvert-koin-injector", version.ref = "konverter" }
-konverter-springAnnotations = { module = "io.mcarle:konvert-spring-annotations", version.ref = "konverter" }
 
 [plugins]
-spring-plugin = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "springPlugin" }
+i18n4k = {id = "de.comahe.i18n4k", version.ref = "i18n4k"}
 jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jvm" }
 kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kapt" }
-jooq = { id = "nu.studer.jooq", version.ref = "jooqPlugin" }
 foojayResolverConvention = { id = "org.gradle.toolchains.foojay-resolver-convention", version.ref = "foojayResolverConvention" }
 gitVersion = { id = "com.palantir.git-version", version.ref = "gitVersion" }
-spring-springBoot = { id = "org.springframework.boot", version.ref = "springboot" }
-spring-dependencyManagment = { id = "io.spring.dependency-management", version.ref = "springDependencyManagment" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 
 [bundles]
 logging = ["logging", "logback", "slf4jApi"]
 db = ["postgresql", "sqlite", "hikari", "liquibase", "jimmer-coreKotlin"]
-konverterSpringProcessor = ["konverter-processor", "konverter-springInjector"]
-konverterSpring = ["konverter-api", "konverter-springAnnotations"]

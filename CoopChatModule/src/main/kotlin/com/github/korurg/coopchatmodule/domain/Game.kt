@@ -14,6 +14,6 @@ data class Game(
     val watchForUpdates: Boolean, //TODO: impl
     val gameState: GameState,
     val steamApp: SteamApp? = null,
-    val updated: OffsetDateTime,
-    val created: OffsetDateTime,
+    val updated: OffsetDateTime = OffsetDateTime.now(),
+    val created: OffsetDateTime = OffsetDateTime.now(),
 )

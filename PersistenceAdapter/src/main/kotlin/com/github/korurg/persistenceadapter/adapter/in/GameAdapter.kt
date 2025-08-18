@@ -13,7 +13,6 @@ import com.github.korurg.persistenceadapter.mapper.toGameEntity
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.babyfish.jimmer.sql.ast.mutation.SaveMode
 import org.babyfish.jimmer.sql.kt.KSqlClient
 import org.babyfish.jimmer.sql.kt.ast.expression.eq
 import org.babyfish.jimmer.sql.kt.fetcher.newFetcher
@@ -26,7 +25,7 @@ class GameAdapter(
 
     override suspend fun saveGame(game: Game) = withContext(defaultDbCoroutineDispatcher) {
         sqlClient.transaction {
-            sqlClient.save(game.toGameEntity(), mode = SaveMode.INSERT_IF_ABSENT)
+            sqlClient.save(game.toGameEntity())
         }
         return@withContext
     }
@@ -56,9 +55,22 @@ class GameAdapter(
         }
 
     override suspend fun getTopActiveGames(count: Int): List<Game> = withContext(defaultDbCoroutineDispatcher) {
+        val fullGraphFetcher = newFetcher(GameEntity::class).by {
+            allScalarFields()
+            steamApp {
+                allScalarFields()
+                categories {
+                    allScalarFields()
+                }
+                currentPrice {
+                    allScalarFields()
+                }
+            }
+        }
+
         sqlClient.transaction {
-            sqlClient.createQuery(GameEntity::class){
-                select(table)
+            sqlClient.createQuery(GameEntity::class) {
+                select(table.fetch(fullGraphFetcher))
             }.limit(count).execute().map { it.toGame() }
         }
     }

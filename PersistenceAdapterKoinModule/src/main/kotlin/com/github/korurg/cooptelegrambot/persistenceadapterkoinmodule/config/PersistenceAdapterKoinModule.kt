@@ -2,7 +2,9 @@ package com.github.korurg.cooptelegrambot.persistenceadapterkoinmodule.config
 
 import com.github.korurg.coopchatmodule.application.port.`in`.GameQueryPort
 import com.github.korurg.coopchatmodule.application.port.out.GameCommandPort
+import com.github.korurg.coopchatmodule.application.port.out.SurveyCommandPort
 import com.github.korurg.persistenceadapter.adapter.`in`.GameAdapter
+import com.github.korurg.persistenceadapter.adapter.`in`.SurveyAdapter
 import com.github.korurg.persistenceadapter.adapter.`in`.TelegramChatAdapter
 import com.github.korurg.persistenceadapter.adapter.`in`.TelegramUserAdapter
 import com.github.korurg.persistenceadapter.adapter.out.TelegramChatQueryAdapter
@@ -14,7 +16,9 @@ import com.github.korurg.telegrambot.application.port.out.TelegramUserSavePort
 import kotlinx.coroutines.Dispatchers
 import org.babyfish.jimmer.Draft
 import org.babyfish.jimmer.sql.DraftInterceptor
+import org.koin.core.module.dsl.singleOf
 import org.koin.core.qualifier.named
+import org.koin.dsl.bind
 import org.koin.dsl.module
 
 private const val DEFAULT_DB_COROUTINE_SCOPE = "defaultDbCoroutineScope"
@@ -62,8 +66,12 @@ val persistenceAdapterModule = module {
         ) as TelegramUserSavePort
     }
 
-    single<TelegramChatQueryPort>(createdAtStart = true) {
-        TelegramChatQueryAdapter()
+    singleOf(::TelegramChatQueryAdapter).apply {
+        bind(TelegramChatQueryPort::class)
+    }
+
+    singleOf(::SurveyAdapter).apply {
+        bind(SurveyCommandPort::class)
     }
 
 }

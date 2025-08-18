@@ -3,7 +3,6 @@ plugins {
 
     alias(libs.plugins.jvm) apply false
     alias(libs.plugins.foojayResolverConvention) apply false
-    alias(libs.plugins.spring.dependencyManagment) apply false
     alias(libs.plugins.kapt) apply false
 }
 
@@ -39,6 +38,7 @@ subprojects {
             add("testImplementation", "org.assertj:assertj-core:3.27.4")
             add("testImplementation", kotlin("test"))
             add("testImplementation", "org.mockito:mockito-core:5.18.0")
+            add("testImplementation", "io.mockk:mockk:1.14.5")
         }
 
     }

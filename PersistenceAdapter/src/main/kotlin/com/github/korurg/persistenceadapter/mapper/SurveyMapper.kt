@@ -1,5 +1,6 @@
 package com.github.korurg.persistenceadapter.mapper
 
+import com.github.korurg.coopchatmodule.domain.PollAnswer
 import com.github.korurg.coopchatmodule.domain.Survey
 import com.github.korurg.coopchatmodule.domain.SurveySchedule
 import com.github.korurg.persistenceadapter.domain.entity.SurveyEntity

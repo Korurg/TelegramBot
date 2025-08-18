@@ -31,3 +31,12 @@ fun TelegramChat.toTelegramChatEntity(): TelegramChatEntity = TelegramChatEntity
     updated = this@toTelegramChatEntity.updated
     created = this@toTelegramChatEntity.created
 }
+
+fun TelegramChatEntity.toTelegramChat() = TelegramChat(
+    id = this@toTelegramChat.id.toChatInternalId(),
+    telegramId = this@toTelegramChat.telegramId.toChatExternalId(),
+    title = this@toTelegramChat.title,
+    type = this@toTelegramChat.type,
+    created = this@toTelegramChat.created,
+    updated = this@toTelegramChat.updated
+)

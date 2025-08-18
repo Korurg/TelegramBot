@@ -4,6 +4,7 @@ import com.github.korurg.telegrambot.application.port.`in`.TelegramMessageReceiv
 import com.github.korurg.telegrambot.application.port.out.TelegramChatSavePort
 import com.github.korurg.telegrambot.application.port.out.TelegramUserSavePort
 import com.github.korurg.telegrambot.domain.TelegramMessage
+import com.github.korurg.telegrambot.domain.TelegramPollAnswer
 import io.github.oshai.kotlinlogging.KotlinLogging
 
 class TelegramBotService(
@@ -28,4 +29,9 @@ class TelegramBotService(
             }
         }
     }
+
+    override suspend fun receivePollAnswer(pollAnswer: TelegramPollAnswer) {
+        TODO("Not yet implemented")
+    }
+
 }

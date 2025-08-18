@@ -7,13 +7,7 @@ dependencies {
     implementation(libs.reflections)
     api(libs.logging)
     api(libs.coroutines)
+    api(libs.i18n4k.jvm)
 
     testImplementation(kotlin("test"))
-}
-
-tasks.test {
-    useJUnitPlatform()
-}
-kotlin {
-    jvmToolchain(21)
 }

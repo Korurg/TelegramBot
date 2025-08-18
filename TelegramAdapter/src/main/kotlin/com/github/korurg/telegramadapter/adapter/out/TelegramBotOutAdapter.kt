@@ -30,7 +30,7 @@ class TelegramBotOutAdapter(
         }
 
         bot.sendMessage(
-            chatId = ChatId.Companion.fromId(sendMessageCommand.chatId.value),
+            chatId = ChatId.fromId(sendMessageCommand.chatId.value),
             text = text,
             replyToMessageId = sendMessageCommand.replyToMessageId?.value
         )
@@ -54,7 +54,7 @@ class TelegramBotOutAdapter(
         }
 
         pollResult.get().poll?.let {
-            return@withContext PollExternalId(it.id)
+            return@withContext PollExternalId(it.id.toString())
         }
 
         throw RuntimeException("Poll creation error")

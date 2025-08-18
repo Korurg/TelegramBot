@@ -5,9 +5,16 @@ import com.github.korurg.ktsteam.KtSteamClient
 import com.github.korurg.ktsteam.SteamAppDetails
 import com.github.korurg.telegramadapter.adapter.`in`.TelegramBotInAdapter
 import com.github.korurg.telegramadapter.adapter.out.TelegramBotOutAdapter
+import com.github.korurg.telegrambot.application.port.`in`.TelegramMessageReceiveUseCase
+import com.github.korurg.telegrambot.application.port.out.TelegramCommandPort
+import com.github.korurg.telegrambot.application.port.out.TelegramMessageSendPort
 import io.ktor.client.request.*
 import io.ktor.server.testing.*
-import org.mockito.Mockito
+import io.mockk.every
+import io.mockk.mockk
+import org.babyfish.jimmer.sql.kt.KSqlClient
+import org.koin.dsl.bind
+import org.koin.ktor.ext.get
 import org.testcontainers.containers.PostgreSQLContainer
 import javax.sql.DataSource
 
@@ -15,9 +22,10 @@ data class TestEnv(
     val app: ApplicationTestBuilder,
     val telegramBotInAdapter: TelegramBotInAdapter,
     val telegramBotOutAdapter: TelegramBotOutAdapter,
-    val steamAppDetails: SteamAppDetails
+    val steamAppDetails: SteamAppDetails,
+    val telegramMessageReceiveUseCase: TelegramMessageReceiveUseCase,
+    val kSqlClient: KSqlClient
 )
-
 
 fun testApplicationWithDb(block: suspend TestEnv.() -> Unit) {
     //TODO: reuse test container
@@ -28,18 +36,21 @@ fun testApplicationWithDb(block: suspend TestEnv.() -> Unit) {
 
     postgres.start()
 
-    val telegramBotInAdapter = Mockito.mock(TelegramBotInAdapter::class.java)
-    val telegramBotOutAdapter = Mockito.mock(TelegramBotOutAdapter::class.java)
 
-    val ktSteamClient = Mockito.mock(KtSteamClient::class.java)
-    val steamAppDetails = Mockito.mock(SteamAppDetails::class.java)
+    val telegramBotInAdapter = mockk<TelegramBotInAdapter>()
+    val telegramBotOutAdapter = mockk<TelegramBotOutAdapter>()
 
-    Mockito.`when`(ktSteamClient.steamAppDetails())
-        .thenReturn(steamAppDetails)
+    val ktSteamClient = mockk<KtSteamClient>()
+    val steamAppDetails = mockk<SteamAppDetails>()
+
+    every { ktSteamClient.steamAppDetails() } returns steamAppDetails
 
     val mockedModule = org.koin.dsl.module() {
         single() { telegramBotInAdapter }
-        single() { telegramBotOutAdapter }
+        single() { telegramBotOutAdapter }.apply {
+            bind(TelegramMessageSendPort::class)
+            bind(TelegramCommandPort::class)
+        }
         single() { ktSteamClient }
     }
 
@@ -60,12 +71,19 @@ fun testApplicationWithDb(block: suspend TestEnv.() -> Unit) {
         //forcefully initialize Koin
         client.get("/fake")
 
-        block(TestEnv(
-            this,
-            telegramBotInAdapter,
-            telegramBotOutAdapter,
-            steamAppDetails
-        ))
+        val telegramMessageReceiveUseCase = application.get<TelegramMessageReceiveUseCase>()
+        val kSqlClient = application.get<KSqlClient>()
+
+        block(
+            TestEnv(
+                this,
+                telegramBotInAdapter,
+                telegramBotOutAdapter,
+                steamAppDetails,
+                telegramMessageReceiveUseCase,
+                kSqlClient
+            )
+        )
     }
 
 }
