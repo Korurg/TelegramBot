@@ -9,6 +9,8 @@ application {
 }
 
 dependencies {
+    implementation(libs.bundles.logging)
+
     implementation(project(":TelegramBotCoreKoinModule"))
     implementation(project(":TelegramAdapterKoinModule"))
     implementation(project(":CoopChatModuleKoinModule"))

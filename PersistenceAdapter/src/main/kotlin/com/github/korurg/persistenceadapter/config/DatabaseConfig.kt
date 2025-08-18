@@ -2,6 +2,7 @@ package com.github.korurg.persistenceadapter.config
 
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
+import io.github.oshai.kotlinlogging.KotlinLogging
 import liquibase.Liquibase
 import liquibase.database.DatabaseFactory
 import liquibase.database.jvm.JdbcConnection
@@ -13,9 +14,12 @@ import org.babyfish.jimmer.sql.dialect.SQLiteDialect
 import org.babyfish.jimmer.sql.kt.KSqlClient
 import org.babyfish.jimmer.sql.kt.newKSqlClient
 import org.babyfish.jimmer.sql.runtime.ConnectionManager
+import org.slf4j.bridge.SLF4JBridgeHandler
+import java.util.logging.LogManager
 import javax.sql.DataSource
 
 class DatabaseConfig {
+    private val logger = KotlinLogging.logger {}
 
     fun hikariConfig(
         jdbcUrl: String,

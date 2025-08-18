@@ -27,17 +27,18 @@ reflections = { module = "org.reflections:reflections", version.ref = "reflectio
 postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
 sqlite = { module = "org.xerial:sqlite-jdbc", version.ref = "sqlite" }
 hikari = { module = "com.zaxxer:HikariCP", version.ref = "hikari" }
-koin-coreJvm =  { module = "io.insert-koin:koin-core-jvm", version.ref = "koin" }
-jimmer-core =  { module = "org.babyfish.jimmer:jimmer-core", version.ref = "jimmer" }
-jimmer-coreKotlin =  { module = "org.babyfish.jimmer:jimmer-core-kotlin", version.ref = "jimmer" }
-jimmer-ksp =  { module = "org.babyfish.jimmer:jimmer-ksp", version.ref = "jimmer" }
-jimmer-sql =  { module = "org.babyfish.jimmer:jimmer-sql", version.ref = "jimmer" }
-jimmer-sqlKotlin =  { module = "org.babyfish.jimmer:jimmer-sql-kotlin", version.ref = "jimmer" }
+koin-coreJvm = { module = "io.insert-koin:koin-core-jvm", version.ref = "koin" }
+jimmer-core = { module = "org.babyfish.jimmer:jimmer-core", version.ref = "jimmer" }
+jimmer-coreKotlin = { module = "org.babyfish.jimmer:jimmer-core-kotlin", version.ref = "jimmer" }
+jimmer-ksp = { module = "org.babyfish.jimmer:jimmer-ksp", version.ref = "jimmer" }
+jimmer-sql = { module = "org.babyfish.jimmer:jimmer-sql", version.ref = "jimmer" }
+jimmer-sqlKotlin = { module = "org.babyfish.jimmer:jimmer-sql-kotlin", version.ref = "jimmer" }
 liquibase = { module = "org.liquibase:liquibase-core", version.ref = "liquibase" }
 telegram-bot = { module = "com.github.kotlin-telegram-bot:kotlin-telegram-bot", version.ref = "telegram-bot" }
 logging = { module = "io.github.oshai:kotlin-logging-jvm", version.ref = "logging" }
 logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 slf4jApi = { module = "org.slf4j:slf4j-api", version.ref = "slf4jApi" }
+julToSlf4j = { module = "org.slf4j:jul-to-slf4j", version.ref = "slf4jApi" }
 ktsteam = { module = "com.github.korurg:KtSteam", version.ref = "ktsteam" }
 coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm", version.ref = "coroutines" }
 konverter-api = { module = "io.mcarle:konvert-api", version.ref = "konverter" }
@@ -45,7 +46,7 @@ konverter-processor = { module = "io.mcarle:konvert", version.ref = "konverter" 
 konverter-koinInjector = { module = "io.mcarle:konvert-koin-injector", version.ref = "konverter" }
 
 [plugins]
-i18n4k = {id = "de.comahe.i18n4k", version.ref = "i18n4k"}
+i18n4k = { id = "de.comahe.i18n4k", version.ref = "i18n4k" }
 jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jvm" }
 kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kapt" }
 foojayResolverConvention = { id = "org.gradle.toolchains.foojay-resolver-convention", version.ref = "foojayResolverConvention" }
@@ -53,5 +54,5 @@ gitVersion = { id = "com.palantir.git-version", version.ref = "gitVersion" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 
 [bundles]
-logging = ["logging", "logback", "slf4jApi"]
+logging = ["logging", "logback", "slf4jApi", "julToSlf4j"]
 db = ["postgresql", "sqlite", "hikari", "liquibase", "jimmer-coreKotlin"]

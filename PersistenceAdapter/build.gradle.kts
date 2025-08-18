@@ -21,6 +21,8 @@ dependencies {
     api(libs.jimmer.sqlKotlin)
     ksp(libs.jimmer.ksp)
 
+    implementation(libs.bundles.logging)
+
     //test
     testImplementation(kotlin("test"))
 }
