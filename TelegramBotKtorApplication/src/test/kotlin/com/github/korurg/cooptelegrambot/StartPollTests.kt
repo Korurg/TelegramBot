@@ -2,12 +2,8 @@ package com.github.korurg.cooptelegrambot
 
 import CoopChatModuleMessages
 import com.github.korurg.coopchatmodule.config.Commands
-import com.github.korurg.coopchatmodule.domain.Poll
-import com.github.korurg.coopchatmodule.domain.PollAnswer
-import com.github.korurg.coopchatmodule.domain.Survey
-import com.github.korurg.coopchatmodule.domain.SurveySchedule
 import com.github.korurg.coopchatmodule.domain.id.SteamAppExternalId
-import com.github.korurg.persistenceadapter.domain.entity.PollAnswerEntity
+import com.github.korurg.persistenceadapter.domain.entity.PollOptionEntity
 import com.github.korurg.persistenceadapter.domain.entity.PollEntity
 import com.github.korurg.persistenceadapter.domain.entity.SurveyEntity
 import com.github.korurg.persistenceadapter.domain.entity.SurveyScheduleEntity
@@ -77,11 +73,6 @@ class StartPollTests : BaseTest() {
         //when
         telegramMessageReceiveUseCase.receiveMessage(messageStartPoll)
 
-
-
-        //TODO: check in db polls
-
-
         //TODO: emulate users
 
         //then
@@ -91,6 +82,6 @@ class StartPollTests : BaseTest() {
         assertThatTableRecordsCount(1, SurveyEntity::class, kSqlClient)
         assertThatTableRecordsCount(1, SurveyScheduleEntity::class, kSqlClient)
         assertThatTableRecordsCount(2, PollEntity::class, kSqlClient)
-        assertThatTableRecordsCount(9, PollAnswerEntity::class, kSqlClient)
+        assertThatTableRecordsCount(9, PollOptionEntity::class, kSqlClient)
     }
 }

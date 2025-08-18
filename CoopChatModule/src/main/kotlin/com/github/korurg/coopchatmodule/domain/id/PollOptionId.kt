@@ -4,9 +4,9 @@ import java.util.*
 
 
 @JvmInline
-value class PollAnswerId(val value: UUID) {
+value class PollOptionId(val value: UUID) {
 
     companion object {
-        fun random(): PollAnswerId = PollAnswerId(UUID.randomUUID())
+        fun random(): PollOptionId = PollOptionId(UUID.randomUUID())
     }
 }

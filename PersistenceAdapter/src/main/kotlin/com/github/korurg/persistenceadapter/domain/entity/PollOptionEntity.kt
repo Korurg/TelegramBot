@@ -6,8 +6,8 @@ import java.time.OffsetDateTime
 import java.util.*
 
 @Entity
-@Table(name = "poll_answer")
-interface PollAnswerEntity {
+@Table(name = "poll_option")
+interface PollOptionEntity {
 
     @Id
     @GeneratedValue(generatorType = UUIDIdGenerator::class)
@@ -23,10 +23,10 @@ interface PollAnswerEntity {
     @Column(name = "type")
     val type: String
 
-    @Column(name = "game_id_answer")
+    @Column(name = "game_id_option")
     val gameIdAnswer: Long? //reference to GameEntity
 
-    @Column(name = "time_answer")
+    @Column(name = "time_option")
     val timeAnswer: OffsetDateTime?
 
     @ManyToOne

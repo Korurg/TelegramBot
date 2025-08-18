@@ -9,7 +9,7 @@ data class Poll(
     val id: PollInternalId? = null,
     val telegramId: PollExternalId,
     val type: PollType,
-    val answers: List<PollAnswer>,
+    val options: List<PollOption>,
     val updated: OffsetDateTime = OffsetDateTime.now(),
     val created: OffsetDateTime = OffsetDateTime.now(),
 )

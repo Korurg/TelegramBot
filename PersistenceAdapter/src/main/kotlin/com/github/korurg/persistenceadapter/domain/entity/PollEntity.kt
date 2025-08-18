@@ -19,5 +19,5 @@ interface PollEntity : AuditableEntity {
     val type: String
 
     @OneToMany(mappedBy = "poll")
-    val answers: List<PollAnswerEntity>
+    val options: List<PollOptionEntity>
 }

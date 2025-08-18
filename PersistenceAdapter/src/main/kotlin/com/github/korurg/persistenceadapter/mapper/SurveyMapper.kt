@@ -1,11 +1,11 @@
 package com.github.korurg.persistenceadapter.mapper
 
 import com.github.korurg.coopchatmodule.domain.Poll
-import com.github.korurg.coopchatmodule.domain.PollAnswer
+import com.github.korurg.coopchatmodule.domain.PollOption
 import com.github.korurg.coopchatmodule.domain.Survey
 import com.github.korurg.coopchatmodule.domain.SurveySchedule
-import com.github.korurg.persistenceadapter.domain.entity.PollAnswerEntity
 import com.github.korurg.persistenceadapter.domain.entity.PollEntity
+import com.github.korurg.persistenceadapter.domain.entity.PollOptionEntity
 import com.github.korurg.persistenceadapter.domain.entity.SurveyEntity
 import com.github.korurg.persistenceadapter.domain.entity.SurveyScheduleEntity
 
@@ -41,14 +41,14 @@ fun Poll.toPollEntity() = PollEntity {
     }
     telegramId = this@toPollEntity.telegramId.value
     type = this@toPollEntity.type.name
-    answers = this@toPollEntity.answers.map { it.toPollAnswerEntity() }
+    options = this@toPollEntity.options.map { it.toPollOptionEntity() }
 }
 
-fun PollAnswer.toPollAnswerEntity() = PollAnswerEntity {
-    id = this@toPollAnswerEntity.id.value
-    telegramId = this@toPollAnswerEntity.pollAnswerId.value
-    answer = this@toPollAnswerEntity.answer
-    type = this@toPollAnswerEntity.type.name
-    gameIdAnswer = this@toPollAnswerEntity.gameIdAnswer?.value
-    timeAnswer = this@toPollAnswerEntity.timeAnswer
+fun PollOption.toPollOptionEntity() = PollOptionEntity {
+    id = this@toPollOptionEntity.id.value
+    telegramId = this@toPollOptionEntity.telegramId.value
+    answer = this@toPollOptionEntity.optionText
+    type = this@toPollOptionEntity.type.name
+    gameIdAnswer = this@toPollOptionEntity.gameIdOption?.value
+    timeAnswer = this@toPollOptionEntity.timeOption
 }

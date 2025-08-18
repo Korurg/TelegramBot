@@ -131,7 +131,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
         - createTable:
-            tableName: poll_answer
+            tableName: poll_option
             columns:
               - column:
                   name: id
@@ -162,11 +162,11 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: game_id_answer
+                  name: game_id_option
                   type: bigint
                   constraints:
-                    foreignKeyName: fk_game_id_answer
+                    foreignKeyName: fk_game_id_option
                     references: game(id)
               - column:
-                  name: time_answer
+                  name: time_option
                   type: timestamptz

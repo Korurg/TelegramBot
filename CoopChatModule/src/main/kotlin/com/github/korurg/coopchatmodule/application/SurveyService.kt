@@ -8,16 +8,15 @@ import com.github.korurg.coopchatmodule.domain.enums.AnswerType
 import com.github.korurg.coopchatmodule.domain.enums.PollType
 import com.github.korurg.coopchatmodule.domain.enums.SurveyScheduleType
 import com.github.korurg.coopchatmodule.domain.enums.SurveyState
-import com.github.korurg.coopchatmodule.domain.id.PollAnswerId
+import com.github.korurg.coopchatmodule.domain.id.PollOptionId
 import com.github.korurg.coopchatmodule.domain.id.SurveyId
 import com.github.korurg.telegrambot.application.port.`in`.TelegramChatQueryPort
 import com.github.korurg.telegrambot.application.port.out.TelegramCommandPort
 import com.github.korurg.telegrambot.domain.TelegramStartPollCommand
 import com.github.korurg.telegrambot.domain.id.ChatExternalId
-import com.github.korurg.telegrambot.domain.id.PollAnswerExternalId
+import com.github.korurg.telegrambot.domain.id.PollOptionExternalId
 import java.time.*
 import java.time.format.DateTimeFormatter
-import java.util.UUID
 
 private const val DEFAULT_START_POLL_TIME = "0 17 * * *"
 private const val DEFAULT_TIMEZONE = "Europe/Moscow"
@@ -77,7 +76,7 @@ class SurveyService(
             TelegramStartPollCommand(
                 chatId = chatId,
                 question = question,
-                answers = timePollAnswers.map { it.answer },
+                answers = timePollAnswers.map { it.optionText },
                 isAnonymous = false,
             )
         )
@@ -85,7 +84,7 @@ class SurveyService(
         return Poll(
             telegramId = timePollId,
             type = PollType.TIME,
-            answers = timePollAnswers
+            options = timePollAnswers
         )
     }
 
@@ -98,7 +97,7 @@ class SurveyService(
             TelegramStartPollCommand(
                 chatId = chatId,
                 question = CoopChatModuleMessages.gamePollQuestion(),
-                answers = gamePollAnswers.map { it.answer },
+                answers = gamePollAnswers.map { it.optionText },
                 isAnonymous = false,
             )
         )
@@ -106,27 +105,27 @@ class SurveyService(
         return Poll(
             telegramId = gamePollId,
             type = PollType.GAME,
-            answers = gamePollAnswers,
+            options = gamePollAnswers,
         )
     }
 
 
-    private fun createGamePollAnswers(games: List<Game>): List<PollAnswer> {
+    private fun createGamePollAnswers(games: List<Game>): List<PollOption> {
         var externalId = 0
         return games.map {
             requireNotNull(it.id)
-            PollAnswer(
-                id = PollAnswerId.random(),
-                answer = "[${it.id.value}] ${it.name}",
+            PollOption(
+                id = PollOptionId.random(),
+                optionText = "[${it.id.value}] ${it.name}",
                 type = AnswerType.GAME,
-                gameIdAnswer = it.id,
-                timeAnswer = null,
-                pollAnswerId = PollAnswerExternalId(externalId++),
+                gameIdOption = it.id,
+                timeOption = null,
+                telegramId = PollOptionExternalId(externalId++),
             )
         }
     }
 
-    private fun createTimePollAnswers(): List<PollAnswer> {
+    private fun createTimePollAnswers(): List<PollOption> {
         //TODO: to db
         val startTime = LocalTime.of(19, 0)
         val stepMinutes = 30L
@@ -143,26 +142,26 @@ class SurveyService(
         }
 
         var externalId = 0
-        val resultList = mutableListOf<PollAnswer>()
+        val resultList = mutableListOf<PollOption>()
 
         resultList.add(
-            PollAnswer(
-                id = PollAnswerId.random(),
-                answer = CoopChatModuleMessages.timePollWonAbleAnswer(),
+            PollOption(
+                id = PollOptionId.random(),
+                optionText = CoopChatModuleMessages.timePollWonAbleAnswer(),
                 type = AnswerType.TIME,
-                gameIdAnswer = null,
-                timeAnswer = null,
-                pollAnswerId = PollAnswerExternalId(externalId++)
+                gameIdOption = null,
+                timeOption = null,
+                telegramId = PollOptionExternalId(externalId++)
             )
         )
         resultList.addAll(offsetDateTimes.reversed().map {
-            PollAnswer(
-                id = PollAnswerId.random(),
-                answer = it.format(DateTimeFormatter.ofPattern("HH:mm")),
+            PollOption(
+                id = PollOptionId.random(),
+                optionText = it.format(DateTimeFormatter.ofPattern("HH:mm")),
                 type = AnswerType.TIME,
-                gameIdAnswer = null,
-                timeAnswer = it,
-                pollAnswerId = PollAnswerExternalId(externalId++),
+                gameIdOption = null,
+                timeOption = it,
+                telegramId = PollOptionExternalId(externalId++),
             )
         })
 

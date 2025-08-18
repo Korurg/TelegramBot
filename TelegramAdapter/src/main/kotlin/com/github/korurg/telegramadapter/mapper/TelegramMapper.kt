@@ -6,7 +6,7 @@ import com.github.korurg.telegrambot.domain.TelegramPollAnswer
 import com.github.korurg.telegrambot.domain.TelegramUser
 import com.github.korurg.telegrambot.domain.id.ChatExternalId
 import com.github.korurg.telegrambot.domain.id.MessageId
-import com.github.korurg.telegrambot.domain.id.PollAnswerExternalId
+import com.github.korurg.telegrambot.domain.id.PollOptionExternalId
 import com.github.korurg.telegrambot.domain.id.PollExternalId
 import com.github.korurg.telegrambot.domain.id.UserExternalId
 import com.github.kotlintelegrambot.entities.Chat
@@ -41,6 +41,6 @@ fun Chat.toTelegramChat() = TelegramChat(
 
 fun PollAnswer.toTelegramPollAnswer() = TelegramPollAnswer(
     pollId = PollExternalId(pollId),
-    answersIds = optionIds.map { PollAnswerExternalId(it) },
+    answersIds = optionIds.map { PollOptionExternalId(it) },
     user = user.toTelegramUser(),
 )
