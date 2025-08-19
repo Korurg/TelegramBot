@@ -10,4 +10,9 @@ class TelegramBot internal constructor(
     internal val callback: Dispatcher.() -> Unit,
     internal val messages: MutableList<suspend MessageHandlerEnvironment.() -> Unit>,
     internal val pollAnswers: MutableList<suspend PollAnswerHandlerEnvironment.() -> Unit>,
-)
+) {
+
+    fun stop() {
+        bot.stopPolling()
+    }
+}

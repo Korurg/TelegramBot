@@ -8,16 +8,15 @@ import com.github.korurg.coopchatmodule.domain.Game
 import com.github.korurg.coopchatmodule.domain.SaveSteamAppCommand
 import com.github.korurg.coopchatmodule.domain.enums.GameState
 import com.github.korurg.coopchatmodule.domain.enums.SteamAppFillState
-import com.github.korurg.telegrambot.application.port.out.TelegramMessageSendPort
+import com.github.korurg.telegrambot.application.TelegramMessageService
 import com.github.korurg.telegrambot.domain.TelegramSendMessageCommand
-import de.comahe.i18n4k.messages.formatter.MessageParametersMap
 import java.time.OffsetDateTime
 
 class GameService(
     private val gameCommandPort: GameCommandPort,
     private val steamAppProviderPort: SteamAppProviderPort,
     private val gameQueryPort: GameQueryPort,
-    private val telegramMessageSendPort: TelegramMessageSendPort,
+    private val telegramMessageService: TelegramMessageService,
 ) {
 
     suspend fun saveGame(game: Game) {
@@ -29,7 +28,7 @@ class GameService(
 
         if (existedGame != null && existedGame.steamApp?.fillState == SteamAppFillState.FILLED) {
             saveSteamAppCommand.message?.let { message ->
-                telegramMessageSendPort.sendMessage(
+                telegramMessageService.sendMessage(
                     TelegramSendMessageCommand(
                         chatId = message.chat.telegramId,
                         text = CoopChatModuleMessages.steamAppAlreadySave(
@@ -61,7 +60,7 @@ class GameService(
 
 
         saveSteamAppCommand.message?.let { message ->
-            telegramMessageSendPort.sendMessage(
+            telegramMessageService.sendMessage(
                 TelegramSendMessageCommand(
                     chatId = message.chat.telegramId,
                     text = CoopChatModuleMessages.steamAppSaved(

@@ -1,7 +1,7 @@
 package com.github.korurg.persistenceadapter.mapper
 
 import com.github.korurg.coopchatmodule.domain.id.*
-import com.github.korurg.telegrambot.domain.id.ChatExternalId
+import com.github.korurg.telegrambot.domain.id.ChatTelegramId
 import com.github.korurg.telegrambot.domain.id.ChatInternalId
 
 
@@ -13,4 +13,4 @@ fun Long.toSteamAppPriceId() = SteamAppPriceId(this)
 fun Long.toSteamCategoryInternalId() = SteamCategoryInternalId(this)
 fun Long.toSteamCategoryExternalId() = SteamCategoryExternalId(this)
 fun Long.toChatInternalId() = ChatInternalId(this)
-fun Long.toChatExternalId() = ChatExternalId(this)
+fun Long.toChatExternalId() = ChatTelegramId(this)

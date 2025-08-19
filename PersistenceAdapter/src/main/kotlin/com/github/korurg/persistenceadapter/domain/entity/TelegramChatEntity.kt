@@ -4,13 +4,14 @@ import org.babyfish.jimmer.sql.*
 
 @Entity
 @Table(name = "telegram_chat")
-interface TelegramChatEntity : AuditableEntity{
+interface TelegramChatEntity : AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     val id: Long
 
+    @Key
     @Column(name = "telegram_id")
     val telegramId: Long
 

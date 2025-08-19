@@ -20,7 +20,7 @@ import com.github.korurg.steamadapter.mapper.toSteamAppId
 import com.github.korurg.telegrambot.domain.TelegramChat
 import com.github.korurg.telegrambot.domain.TelegramMessage
 import com.github.korurg.telegrambot.domain.TelegramUser
-import com.github.korurg.telegrambot.domain.id.ChatExternalId
+import com.github.korurg.telegrambot.domain.id.ChatTelegramId
 import com.github.korurg.telegrambot.domain.id.MessageId
 import com.github.korurg.telegrambot.domain.id.UserExternalId
 import org.assertj.core.api.Assertions.assertThat
@@ -134,7 +134,7 @@ open class BaseTest {
         )
     }
 
-    protected fun defaultChatExternalId() = ChatExternalId(1)
+    protected fun defaultChatExternalId() = ChatTelegramId(1)
 
     protected fun defaultMessage(text: String): TelegramMessage {
         return TelegramMessage(

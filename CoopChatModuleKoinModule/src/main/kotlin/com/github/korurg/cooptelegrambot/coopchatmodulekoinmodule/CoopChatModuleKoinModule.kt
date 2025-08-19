@@ -12,29 +12,47 @@ import com.github.korurg.telegrambot.application.TelegramBotReceiveMessageTrigge
 import org.koin.core.module.dsl.createdAtStart
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.qualifier.named
+import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val coopChatModule = module {
-    single<TelegramBotReceiveMessageTrigger>(named("commandTrigger"), createdAtStart = true) {
+    single(named("commandTrigger"), createdAtStart = true) {
         CommandTrigger(
             get(),
+            getAll(),
             get(),
-            getAll()
         )
+    }.apply {
+        bind(TelegramBotReceiveMessageTrigger::class)
     }
+
     single<TelegramBotReceiveMessageTrigger>(
         named("steamLinkTrigger"),
         createdAtStart = true
     ) { SteamLinkTrigger(get()) }
-    single<CommandHandler>(named("gameAddCommandHandler"), createdAtStart = true) { GameAddCommandHandler(get()) }
-    single<CommandHandler>(named("pollStartCommandHandler"), createdAtStart = true) { PollStartCommandHandler(get()) }
-    singleOf(::CommandParserService){
+
+    singleOf(::GameAddCommandHandler){
+        named("gameAddCommandHandler")
+        createdAtStart()
+    }.apply {
+        bind(CommandHandler::class)
+    }
+
+    singleOf(::PollStartCommandHandler){
+        named("pollStartCommandHandler")
+        createdAtStart()
+    }.apply {
+        bind(CommandHandler::class)
+    }
+
+
+    singleOf(::CommandParserService) {
         createdAtStart()
     }
-    singleOf(::SurveyService){
+    singleOf(::SurveyService) {
         createdAtStart()
     }
-    singleOf(::GameService){
+    singleOf(::GameService) {
         createdAtStart()
     }
 }

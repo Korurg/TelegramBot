@@ -1,54 +1,49 @@
 package com.github.korurg.persistenceadapter.mapper
 
-import com.github.korurg.coopchatmodule.domain.Poll
-import com.github.korurg.coopchatmodule.domain.PollOption
+import com.github.korurg.coopchatmodule.domain.CoopPoll
+import com.github.korurg.coopchatmodule.domain.CoopPollOption
 import com.github.korurg.coopchatmodule.domain.Survey
 import com.github.korurg.coopchatmodule.domain.SurveySchedule
-import com.github.korurg.persistenceadapter.domain.entity.PollEntity
-import com.github.korurg.persistenceadapter.domain.entity.PollOptionEntity
+import com.github.korurg.persistenceadapter.domain.entity.CoopPollEntity
+import com.github.korurg.persistenceadapter.domain.entity.CoopPollOptionEntity
 import com.github.korurg.persistenceadapter.domain.entity.SurveyEntity
 import com.github.korurg.persistenceadapter.domain.entity.SurveyScheduleEntity
 
 
-fun Survey.toSurveyEntity() = SurveyEntity {
-    this@toSurveyEntity.id?.let {
-        id = it.value
-    }
-    chatId = requireNotNull(this@toSurveyEntity.chat.id).value
-    state = this@toSurveyEntity.state.name
-    schedule = this@toSurveyEntity.schedule.toSurveyScheduleEntity()
-    gamePoll = this@toSurveyEntity.gamePoll?.toPollEntity()
-    timePoll = this@toSurveyEntity.timePoll.toPollEntity()
+fun Survey.toEntity() = SurveyEntity {
+    id = this@toEntity.id.value
+    chatId = requireNotNull(this@toEntity.chat.id).value
+    state = this@toEntity.state.name
+    schedule = this@toEntity.schedule.toEntity()
+    gamePoll = this@toEntity.gameCoopPoll?.toEntity()
+    timePoll = this@toEntity.timeCoopPoll.toEntity()
 }
 
 
-fun SurveySchedule.toSurveyScheduleEntity() = SurveyScheduleEntity {
-    this@toSurveyScheduleEntity.id?.let {
+fun SurveySchedule.toEntity() = SurveyScheduleEntity {
+    this@toEntity.id?.let {
         id = it.value
     }
-    startDate = this@toSurveyScheduleEntity.startDate
-    endDate = this@toSurveyScheduleEntity.endDate
-    type = this@toSurveyScheduleEntity.type.name
-    intervalCron = this@toSurveyScheduleEntity.intervalCron
-    skipUntil = this@toSurveyScheduleEntity.skipUntil
-    timezone = this@toSurveyScheduleEntity.timezone
+    startDate = this@toEntity.startDate
+    endDate = this@toEntity.endDate
+    type = this@toEntity.type.name
+    intervalCron = this@toEntity.intervalCron
+    skipUntil = this@toEntity.skipUntil
+    timezone = this@toEntity.timezone
 }
 
 
-fun Poll.toPollEntity() = PollEntity {
-    this@toPollEntity.id?.let {
-        id = it.value
-    }
-    telegramId = this@toPollEntity.telegramId.value
-    type = this@toPollEntity.type.name
-    options = this@toPollEntity.options.map { it.toPollOptionEntity() }
+fun CoopPoll.toEntity() = CoopPollEntity {
+    id = this@toEntity.id.value
+    poll = this@toEntity.poll.toEntity()
+    type = this@toEntity.type.name
+    options = this@toEntity.options.map { it.toEntity() }
 }
 
-fun PollOption.toPollOptionEntity() = PollOptionEntity {
-    id = this@toPollOptionEntity.id.value
-    telegramId = this@toPollOptionEntity.telegramId.value
-    answer = this@toPollOptionEntity.optionText
-    type = this@toPollOptionEntity.type.name
-    gameIdAnswer = this@toPollOptionEntity.gameIdOption?.value
-    timeAnswer = this@toPollOptionEntity.timeOption
+fun CoopPollOption.toEntity() = CoopPollOptionEntity {
+    id = this@toEntity.id.value
+    type = this@toEntity.type.name
+    gameIdOption = this@toEntity.gameIdOption?.value
+    timeOption = this@toEntity.timeOption
+    option = this@toEntity.pollOption.toEntity()
 }

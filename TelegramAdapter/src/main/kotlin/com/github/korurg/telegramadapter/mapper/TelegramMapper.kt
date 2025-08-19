@@ -4,10 +4,10 @@ import com.github.korurg.telegrambot.domain.TelegramChat
 import com.github.korurg.telegrambot.domain.TelegramMessage
 import com.github.korurg.telegrambot.domain.TelegramPollAnswer
 import com.github.korurg.telegrambot.domain.TelegramUser
-import com.github.korurg.telegrambot.domain.id.ChatExternalId
+import com.github.korurg.telegrambot.domain.id.ChatTelegramId
 import com.github.korurg.telegrambot.domain.id.MessageId
-import com.github.korurg.telegrambot.domain.id.PollOptionExternalId
-import com.github.korurg.telegrambot.domain.id.PollExternalId
+import com.github.korurg.telegrambot.domain.id.PollOptionTelegramId
+import com.github.korurg.telegrambot.domain.id.PollTelegramId
 import com.github.korurg.telegrambot.domain.id.UserExternalId
 import com.github.kotlintelegrambot.entities.Chat
 import com.github.kotlintelegrambot.entities.Message
@@ -33,14 +33,14 @@ fun User.toTelegramUser() = TelegramUser(
 )
 
 fun Chat.toTelegramChat() = TelegramChat(
-    telegramId = ChatExternalId(id),
+    telegramId = ChatTelegramId(id),
     title = title,
     type = type
 )
 
 
 fun PollAnswer.toTelegramPollAnswer() = TelegramPollAnswer(
-    pollId = PollExternalId(pollId),
-    answersIds = optionIds.map { PollOptionExternalId(it) },
+    pollId = PollTelegramId(pollId),
+    answersIds = optionIds.map { PollOptionTelegramId(it) },
     user = user.toTelegramUser(),
 )

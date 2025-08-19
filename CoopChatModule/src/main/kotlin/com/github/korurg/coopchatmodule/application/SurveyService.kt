@@ -5,16 +5,17 @@ import com.github.korurg.coopchatmodule.application.port.`in`.GameQueryPort
 import com.github.korurg.coopchatmodule.application.port.out.SurveyCommandPort
 import com.github.korurg.coopchatmodule.domain.*
 import com.github.korurg.coopchatmodule.domain.enums.AnswerType
-import com.github.korurg.coopchatmodule.domain.enums.PollType
+import com.github.korurg.coopchatmodule.domain.enums.CoopPollType
 import com.github.korurg.coopchatmodule.domain.enums.SurveyScheduleType
 import com.github.korurg.coopchatmodule.domain.enums.SurveyState
-import com.github.korurg.coopchatmodule.domain.id.PollOptionId
+import com.github.korurg.coopchatmodule.domain.id.CoopPollId
+import com.github.korurg.coopchatmodule.domain.id.CoopPollOptionId
+import com.github.korurg.coopchatmodule.domain.id.GameId
 import com.github.korurg.coopchatmodule.domain.id.SurveyId
+import com.github.korurg.telegrambot.application.TelegramPollService
 import com.github.korurg.telegrambot.application.port.`in`.TelegramChatQueryPort
-import com.github.korurg.telegrambot.application.port.out.TelegramCommandPort
 import com.github.korurg.telegrambot.domain.TelegramStartPollCommand
-import com.github.korurg.telegrambot.domain.id.ChatExternalId
-import com.github.korurg.telegrambot.domain.id.PollOptionExternalId
+import com.github.korurg.telegrambot.domain.id.ChatTelegramId
 import java.time.*
 import java.time.format.DateTimeFormatter
 
@@ -24,15 +25,15 @@ private const val DEFAULT_TIMEZONE = "Europe/Moscow"
 class SurveyService(
     private val gameQueryPort: GameQueryPort,
     private val chatQueryPort: TelegramChatQueryPort,
-    private val telegramCommandPort: TelegramCommandPort,
+    private val telegramPollService: TelegramPollService,
     private val surveyCommandPort: SurveyCommandPort,
 ) {
-    suspend fun startDefaultPoll(telegramId: ChatExternalId) {
+    suspend fun startDefaultPoll(telegramId: ChatTelegramId) {
         val topActiveGames = gameQueryPort.getTopActiveGames(5)
         startDefaultPoll(telegramId, topActiveGames)
     }
 
-    suspend fun startDefaultPoll(chatId: ChatExternalId, games: List<Game>) {
+    suspend fun startDefaultPoll(chatId: ChatTelegramId, games: List<Game>) {
         val telegramChat = chatQueryPort.findChatByExternalId(chatId)
         requireNotNull(telegramChat)
 
@@ -53,8 +54,8 @@ class SurveyService(
                 timezone = DEFAULT_TIMEZONE,
             ),
             chat = telegramChat,
-            timePoll = timePoll,
-            gamePoll = gamePoll,
+            timeCoopPoll = timePoll,
+            gameCoopPoll = gamePoll,
             gameId = game?.id
         )
 
@@ -62,70 +63,81 @@ class SurveyService(
     }
 
     private suspend fun startTimePoll(
-        chatId: ChatExternalId,
+        chatId: ChatTelegramId,
         game: Game?
-    ): Poll {
-        val timePollAnswers = createTimePollAnswers()
+    ): CoopPoll {
+        val timePollOptions = createTimePollOptions()
 
         var question = CoopChatModuleMessages.timePollQuestion()
         game?.let {
             question = CoopChatModuleMessages.timePollWithConcreteGameQuestion(it.name)
         }
 
-        val timePollId = telegramCommandPort.startPoll(
+        val timePoll = telegramPollService.startPoll(
             TelegramStartPollCommand(
-                chatId = chatId,
+                chatTelegramId = chatId,
                 question = question,
-                answers = timePollAnswers.map { it.optionText },
+                options = timePollOptions.keys.toList(),
                 isAnonymous = false,
             )
         )
-
-        return Poll(
-            telegramId = timePollId,
-            type = PollType.TIME,
-            options = timePollAnswers
+        //TODO: refactor
+        return CoopPoll(
+            id = CoopPollId.random(),
+            poll = timePoll,
+            type = CoopPollType.TIME,
+            options = timePoll.options.map {
+                CoopPollOption(
+                    id = CoopPollOptionId.random(),
+                    pollOption = it,
+                    type = AnswerType.GAME,
+                    gameIdOption = null,
+                    timeOption = timePollOptions[it.option]
+                )
+            }
         )
     }
 
-    private suspend fun startGamePoll(chatId: ChatExternalId, games: List<Game>): Poll? {
+    private suspend fun startGamePoll(chatId: ChatTelegramId, games: List<Game>): CoopPoll? {
         if (games.size <= 1) {
             return null
         }
-        val gamePollAnswers = createGamePollAnswers(games)
-        val gamePollId = telegramCommandPort.startPoll(
+        val gameOptions = createGamePollOptions(games)
+
+        val gamePoll = telegramPollService.startPoll(
             TelegramStartPollCommand(
-                chatId = chatId,
+                chatTelegramId = chatId,
                 question = CoopChatModuleMessages.gamePollQuestion(),
-                answers = gamePollAnswers.map { it.optionText },
+                options = gameOptions.keys.toList(),
                 isAnonymous = false,
             )
         )
 
-        return Poll(
-            telegramId = gamePollId,
-            type = PollType.GAME,
-            options = gamePollAnswers,
+        return CoopPoll(
+            id = CoopPollId.random(),
+            poll = gamePoll,
+            type = CoopPollType.GAME,
+            options = gamePoll.options.map {
+                CoopPollOption(
+                    id = CoopPollOptionId.random(),
+                    pollOption = it,
+                    type = AnswerType.GAME,
+                    gameIdOption = gameOptions[it.option],
+                    timeOption = null
+                )
+            },
         )
     }
 
 
-    private fun createGamePollAnswers(games: List<Game>): List<PollOption> {
-        var externalId = 0
-        return games.map {
+    private fun createGamePollOptions(games: List<Game>): Map<String, GameId> {
+        return games.associate {
             requireNotNull(it.id)
-            PollOption(
-                id = PollOptionId.random(),
-                optionText = "[${it.id.value}] ${it.name}",
-                type = AnswerType.GAME,
-                gameIdOption = it.id,
-                timeOption = null,
-                telegramId = PollOptionExternalId(externalId++),
-            )
+            "[${it.id.value}] ${it.name}" to it.id
         }
     }
 
-    private fun createTimePollAnswers(): List<PollOption> {
+    private fun createTimePollOptions(): Map<String, OffsetDateTime?> {
         //TODO: to db
         val startTime = LocalTime.of(19, 0)
         val stepMinutes = 30L
@@ -141,29 +153,12 @@ class SurveyService(
             )
         }
 
-        var externalId = 0
-        val resultList = mutableListOf<PollOption>()
+        val resultList = mutableMapOf<String, OffsetDateTime?>()
 
-        resultList.add(
-            PollOption(
-                id = PollOptionId.random(),
-                optionText = CoopChatModuleMessages.timePollWonAbleAnswer(),
-                type = AnswerType.TIME,
-                gameIdOption = null,
-                timeOption = null,
-                telegramId = PollOptionExternalId(externalId++)
-            )
-        )
-        resultList.addAll(offsetDateTimes.reversed().map {
-            PollOption(
-                id = PollOptionId.random(),
-                optionText = it.format(DateTimeFormatter.ofPattern("HH:mm")),
-                type = AnswerType.TIME,
-                gameIdOption = null,
-                timeOption = it,
-                telegramId = PollOptionExternalId(externalId++),
-            )
-        })
+        resultList[CoopChatModuleMessages.timePollWonAbleAnswer()] = null
+        offsetDateTimes.reversed().forEach {
+            resultList[it.format(DateTimeFormatter.ofPattern("HH:mm"))] = it
+        }
 
         return resultList
     }

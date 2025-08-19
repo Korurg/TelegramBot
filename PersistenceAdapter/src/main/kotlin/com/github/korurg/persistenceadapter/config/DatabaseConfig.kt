@@ -14,8 +14,7 @@ import org.babyfish.jimmer.sql.dialect.SQLiteDialect
 import org.babyfish.jimmer.sql.kt.KSqlClient
 import org.babyfish.jimmer.sql.kt.newKSqlClient
 import org.babyfish.jimmer.sql.runtime.ConnectionManager
-import org.slf4j.bridge.SLF4JBridgeHandler
-import java.util.logging.LogManager
+import org.babyfish.jimmer.sql.runtime.DatabaseValidationMode
 import javax.sql.DataSource
 
 class DatabaseConfig {
@@ -40,7 +39,7 @@ class DatabaseConfig {
 
     fun sqlClient(
         dataSource: DataSource,
-        interceptors: Collection<DraftInterceptor<out Any, out Draft>>,
+        interceptors: Collection<DraftInterceptor<out Any, out Draft>>
     ): KSqlClient {
         return newKSqlClient {
             setDialect(
@@ -72,6 +71,7 @@ class DatabaseConfig {
             } else {
                 "postgresql"
             }
+
 
             val liquibase = Liquibase(
                 "db/changelog/$file.db.changelog-master.yaml",

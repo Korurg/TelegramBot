@@ -4,12 +4,11 @@ databaseChangeLog:
       author: korurg
       changes:
         - createTable:
-            tableName: poll
+            tableName: telegram_poll
             columns:
               - column:
                   name: id
-                  type: bigint
-                  autoIncrement: true
+                  type: uuid
                   constraints:
                     primaryKey: true
                     nullable: false
@@ -19,10 +18,127 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
+                  name: telegram_chat_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_telegram_chat_id
+                    references: telegram_chat(id)
+              - column:
+                  name: question
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_anonymous
+                  type: bool
+                  constraints:
+                    nullable: false
+              - column:
                   name: type
                   type: text
                   constraints:
                     nullable: false
+              - column:
+                  name: updated
+                  type: timestamptz
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created
+                  type: timestamptz
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: telegram_poll_option
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: telegram_id
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: option
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: telegram_poll_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_telegram_poll_id
+                    references: telegram_poll(id)
+              - column:
+                  name: updated
+                  type: timestamptz
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created
+                  type: timestamptz
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: telegram_poll_answer
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_user_id
+                    references: telegram_user(id)
+              - column:
+                  name: telegram_poll_option_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_telegram_poll_option_id
+                    references: telegram_poll_option(id)
+              - column:
+                  name: updated
+                  type: timestamptz
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created
+                  type: timestamptz
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: coop_poll
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: type
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: telegram_poll_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_telegram_poll_id
+                    references: telegram_poll(id)
               - column:
                   name: updated
                   type: timestamptz
@@ -56,17 +172,17 @@ databaseChangeLog:
                     references: telegram_chat(id)
               - column:
                   name: game_poll_id
-                  type: bigint
+                  type: uuid
                   constraints:
                     foreignKeyName: fk_game_poll_id
-                    references: poll(id)
+                    references: coop_poll(id)
               - column:
                   name: time_poll_id
-                  type: bigint
+                  type: uuid
                   constraints:
                     nullable: false
                     foreignKeyName: fk_time_poll_id
-                    references: poll(id)
+                    references: coop_poll(id)
               - column:
                   name: updated
                   type: timestamptz
@@ -131,7 +247,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
         - createTable:
-            tableName: poll_option
+            tableName: coop_poll_option
             columns:
               - column:
                   name: id
@@ -140,27 +256,17 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: answer
-                  type: text
-                  constraints:
-                    nullable: false
-              - column:
-                  name: telegram_id
-                  type: int
-                  constraints:
-                    nullable: false
-              - column:
-                  name: poll_id
-                  type: bigint
-                  constraints:
-                    nullable: false
-                    foreignKeyName: fk_poll_id
-                    references: poll(id)
-              - column:
                   name: type
                   type: text
                   constraints:
                     nullable: false
+              - column:
+                  name: coop_poll_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_coop_poll_id
+                    references: coop_poll(id)
               - column:
                   name: game_id_option
                   type: bigint
@@ -170,3 +276,10 @@ databaseChangeLog:
               - column:
                   name: time_option
                   type: timestamptz
+              - column:
+                  name: telegram_poll_option_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_telegram_poll_option_id
+                    references: telegram_poll_option(id)

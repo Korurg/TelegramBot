@@ -6,8 +6,9 @@ import com.github.korurg.telegrambot.application.port.out.TelegramCommandPort
 import com.github.korurg.telegrambot.application.port.out.TelegramMessageSendPort
 import com.github.korurg.telegrambot.domain.TelegramSendMessageCommand
 import com.github.korurg.telegrambot.domain.TelegramStartPollCommand
-import com.github.korurg.telegrambot.domain.id.PollExternalId
+import com.github.korurg.telegrambot.domain.id.PollTelegramId
 import com.github.kotlintelegrambot.entities.ChatId
+import com.github.kotlintelegrambot.entities.polls.PollType
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -40,13 +41,16 @@ class TelegramBotOutAdapter(
 
     override suspend fun startPoll(
         startPollCommand: TelegramStartPollCommand
-    ): PollExternalId = withContext(defaultTelegramCoroutineDispatcher) {
-
+    ): PollTelegramId = withContext(defaultTelegramCoroutineDispatcher) {
         val pollResult = bot.sendPoll(
-            chatId = ChatId.fromId(startPollCommand.chatId.value),
+            chatId = ChatId.fromId(startPollCommand.chatTelegramId.value),
             question = startPollCommand.question,
-            options = startPollCommand.answers,
-            isAnonymous = startPollCommand.isAnonymous
+            options = startPollCommand.options,
+            isAnonymous = startPollCommand.isAnonymous,
+            type = when(startPollCommand.type){
+                com.github.korurg.telegrambot.domain.enums.PollType.QUIZ ->PollType.QUIZ
+                com.github.korurg.telegrambot.domain.enums.PollType.REGULAR -> PollType.REGULAR
+            }
         )
 
         if (pollResult.isError) {
@@ -54,7 +58,7 @@ class TelegramBotOutAdapter(
         }
 
         pollResult.get().poll?.let {
-            return@withContext PollExternalId(it.id.toString())
+            return@withContext PollTelegramId(it.id.toString())
         }
 
         throw RuntimeException("Poll creation error")

@@ -3,15 +3,15 @@ package com.github.korurg.coopchatmodule.application.triggers
 import com.github.korurg.coopchatmodule.application.CommandParserService
 import com.github.korurg.coopchatmodule.application.commands.CommandHandler
 import com.github.korurg.telegrambot.application.TelegramBotReceiveMessageTrigger
-import com.github.korurg.telegrambot.application.port.out.TelegramMessageSendPort
+import com.github.korurg.telegrambot.application.TelegramMessageService
 import com.github.korurg.telegrambot.domain.TelegramMessage
 import com.github.korurg.telegrambot.domain.TelegramSendMessageCommand
 import io.github.oshai.kotlinlogging.KotlinLogging
 
 class CommandTrigger(
     private val commandParserService: CommandParserService,
-    private val telegramMessageSendPort: TelegramMessageSendPort,
     private val commandHandlers: List<CommandHandler>,
+    private val telegramMessageService: TelegramMessageService
 ) : TelegramBotReceiveMessageTrigger {
     private val logger = KotlinLogging.logger {}
     private val commandHandlersMap = commandHandlers.associateBy { it.getCommand() }
@@ -27,7 +27,7 @@ class CommandTrigger(
                 if (handler != null) {
                     handler.handle(command, message)
                 } else {
-                    telegramMessageSendPort.sendMessage(
+                    telegramMessageService.sendMessage(
                         TelegramSendMessageCommand(
                             chatId = message.chat.telegramId,
                             text = "Unknown command"
@@ -37,7 +37,7 @@ class CommandTrigger(
             } catch (e: Exception) {
                 logger.error(e) { e.message }
                 e.message?.let { errorMessage ->
-                    telegramMessageSendPort.sendMessage(
+                    telegramMessageService.sendMessage(
                         TelegramSendMessageCommand(
                             chatId = message.chat.telegramId,
                             text = errorMessage

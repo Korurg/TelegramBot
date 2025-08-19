@@ -1,10 +1,12 @@
 package com.github.korurg.telegrambot.domain
 
-import com.github.korurg.telegrambot.domain.id.ChatExternalId
+import com.github.korurg.telegrambot.domain.enums.PollType
+import com.github.korurg.telegrambot.domain.id.ChatTelegramId
 
 data class TelegramStartPollCommand(
-    val chatId: ChatExternalId,
+    val chatTelegramId: ChatTelegramId,
     val question: String,
-    val answers: List<String>,
-    val isAnonymous: Boolean? = null,
+    val options: List<String>,
+    val isAnonymous: Boolean = false,
+    val type: PollType = PollType.REGULAR,
 )

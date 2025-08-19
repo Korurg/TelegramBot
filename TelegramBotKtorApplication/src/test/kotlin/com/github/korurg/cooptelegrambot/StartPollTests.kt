@@ -3,13 +3,14 @@ package com.github.korurg.cooptelegrambot
 import CoopChatModuleMessages
 import com.github.korurg.coopchatmodule.config.Commands
 import com.github.korurg.coopchatmodule.domain.id.SteamAppExternalId
-import com.github.korurg.persistenceadapter.domain.entity.PollOptionEntity
-import com.github.korurg.persistenceadapter.domain.entity.PollEntity
+import com.github.korurg.persistenceadapter.domain.entity.CoopPollOptionEntity
+import com.github.korurg.persistenceadapter.domain.entity.CoopPollEntity
 import com.github.korurg.persistenceadapter.domain.entity.SurveyEntity
 import com.github.korurg.persistenceadapter.domain.entity.SurveyScheduleEntity
 import com.github.korurg.persistenceadapter.mapper.toGameEntity
 import com.github.korurg.telegrambot.domain.TelegramStartPollCommand
-import com.github.korurg.telegrambot.domain.id.PollExternalId
+import com.github.korurg.telegrambot.domain.enums.PollType
+import com.github.korurg.telegrambot.domain.id.PollTelegramId
 import io.mockk.coEvery
 import io.mockk.coVerify
 import kotlin.test.Test
@@ -39,20 +40,21 @@ class StartPollTests : BaseTest() {
         val messageStartPoll = defaultMessage("/${Commands.POLL_START}")
 
         val startGamePollCommand = TelegramStartPollCommand(
-            chatId = defaultChatExternalId(),
+            chatTelegramId = defaultChatExternalId(),
             question = CoopChatModuleMessages.gamePollQuestion(),
-            answers = listOf(
+            options = listOf(
                 "[${game1Id}] ${game1.name}",
                 "[${game2Id}] ${game2.name}",
                 "[${game3Id}] ${game3.name}",
             ),
             isAnonymous = false,
+            type = PollType.REGULAR,
         )
 
         val startTimePollCommand = TelegramStartPollCommand(
-            chatId = defaultChatExternalId(),
+            chatTelegramId = defaultChatExternalId(),
             question = CoopChatModuleMessages.timePollQuestion(),
-            answers = listOf(
+            options = listOf(
                 CoopChatModuleMessages.timePollWonAbleAnswer(),
                 "21:00",
                 "20:30",
@@ -61,10 +63,11 @@ class StartPollTests : BaseTest() {
                 "19:00",
             ),
             isAnonymous = false,
+            type = PollType.REGULAR,
         )
 
-        val gamePollId = PollExternalId("1")
-        val timePollId = PollExternalId("2")
+        val gamePollId = PollTelegramId("1")
+        val timePollId = PollTelegramId("2")
 
         coEvery { telegramBotOutAdapter.startPoll(startGamePollCommand) } returns gamePollId
         coEvery { telegramBotOutAdapter.startPoll(startTimePollCommand) } returns timePollId
@@ -81,7 +84,7 @@ class StartPollTests : BaseTest() {
 
         assertThatTableRecordsCount(1, SurveyEntity::class, kSqlClient)
         assertThatTableRecordsCount(1, SurveyScheduleEntity::class, kSqlClient)
-        assertThatTableRecordsCount(2, PollEntity::class, kSqlClient)
-        assertThatTableRecordsCount(9, PollOptionEntity::class, kSqlClient)
+        assertThatTableRecordsCount(2, CoopPollEntity::class, kSqlClient)
+        assertThatTableRecordsCount(9, CoopPollOptionEntity::class, kSqlClient)
     }
 }

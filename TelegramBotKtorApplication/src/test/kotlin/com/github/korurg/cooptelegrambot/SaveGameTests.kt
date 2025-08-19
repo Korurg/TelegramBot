@@ -1,39 +1,14 @@
 package com.github.korurg.cooptelegrambot
 
 import com.github.korurg.coopchatmodule.application.port.`in`.GameQueryPort
-import com.github.korurg.coopchatmodule.domain.Game
-import com.github.korurg.coopchatmodule.domain.SteamApp
-import com.github.korurg.coopchatmodule.domain.SteamAppCategory
-import com.github.korurg.coopchatmodule.domain.SteamAppPrice
-import com.github.korurg.coopchatmodule.domain.enums.SteamAppFillState
 import com.github.korurg.coopchatmodule.domain.id.SteamAppExternalId
-import com.github.korurg.coopchatmodule.domain.id.SteamCategoryExternalId
 import com.github.korurg.ktsteam.dto.*
-import com.github.korurg.ktsteam.enums.ControllerSupport
-import com.github.korurg.ktsteam.enums.Currency
 import com.github.korurg.ktsteam.enums.Language
-import com.github.korurg.ktsteam.enums.PackageType
 import com.github.korurg.persistenceadapter.domain.entity.SteamAppCategoryEntity
 import com.github.korurg.persistenceadapter.domain.entity.SteamAppEntity
 import com.github.korurg.steamadapter.mapper.toAppId
-import com.github.korurg.steamadapter.mapper.toSteamAppId
-import com.github.korurg.telegrambot.application.port.`in`.TelegramMessageReceiveUseCase
-import com.github.korurg.telegrambot.domain.TelegramChat
-import com.github.korurg.telegrambot.domain.TelegramMessage
-import com.github.korurg.telegrambot.domain.TelegramUser
-import com.github.korurg.telegrambot.domain.id.ChatExternalId
-import com.github.korurg.telegrambot.domain.id.MessageId
-import com.github.korurg.telegrambot.domain.id.UserExternalId
 import io.mockk.coEvery
-import io.mockk.every
-import org.assertj.core.api.Assertions.assertThat
-import org.babyfish.jimmer.sql.kt.KSqlClient
-import org.babyfish.jimmer.sql.kt.ast.expression.count
 import org.koin.ktor.ext.get
-import org.mockito.Mockito.`when`
-import kotlin.contracts.ExperimentalContracts
-import kotlin.contracts.contract
-import kotlin.reflect.KClass
 import kotlin.test.Test
 
 class SaveGameTests : BaseTest() {

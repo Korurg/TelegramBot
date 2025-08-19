@@ -20,11 +20,11 @@ interface SurveyEntity : AuditableEntity {
 
     @OneToOne
     @JoinColumn(name = "game_poll_id")
-    val gamePoll: PollEntity?
+    val gamePoll: CoopPollEntity?
 
     @OneToOne
     @JoinColumn(name = "time_poll_id")
-    val timePoll: PollEntity
+    val timePoll: CoopPollEntity
 
     @OneToOne(mappedBy = "survey")
     val schedule: SurveyScheduleEntity?
