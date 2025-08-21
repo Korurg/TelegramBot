@@ -7,8 +7,11 @@ import com.github.korurg.persistenceadapter.domain.entity.*
 import com.github.korurg.persistenceadapter.mapper.toDomain
 import com.github.korurg.persistenceadapter.mapper.toEntity
 import com.github.korurg.persistenceadapter.mapper.toGame
+import com.github.korurg.telegrambot.domain.TelegramPollAnswer
 import com.github.korurg.telegrambot.domain.TelegramStartPollCommand
+import com.github.korurg.telegrambot.domain.TelegramUser
 import com.github.korurg.telegrambot.domain.enums.PollType
+import com.github.korurg.telegrambot.domain.id.PollOptionTelegramId
 import com.github.korurg.telegrambot.domain.id.PollTelegramId
 import com.github.korurg.telegrambot.domain.id.UserTelegramId
 import io.mockk.coEvery
@@ -25,6 +28,7 @@ class StartPollTests : BaseTest() {
                 UserTelegramId(1L),
                 UserTelegramId(2L),
                 UserTelegramId(3L),
+                UserTelegramId(4L),
             ).mapIndexed { index, id ->
                 defaultTelegramUser(id).copy(
                     firstName = "firstName$index",
@@ -91,12 +95,26 @@ class StartPollTests : BaseTest() {
         telegramMessageReceiveUseCase.receiveMessage(messageStartPoll)
 
 
-//        telegramMessageReceiveUseCase.receivePollAnswer(TelegramPollAnswer(
-//            pollId = gamePollId,
-//            answersIds = listOf(0),
-//            user = TelegramUser()
-//        ))
-        //TODO: emulate users
+        suspend fun pollGameAndTime(user: TelegramUser, timeAnswer: Int, gameAnswer: Int) {
+            telegramMessageReceiveUseCase.receivePollAnswer(
+                TelegramPollAnswer(
+                    pollId = timePollId,
+                    answersIds = listOf(PollOptionTelegramId(timeAnswer)),
+                    user = user
+                )
+            )
+            telegramMessageReceiveUseCase.receivePollAnswer(
+                TelegramPollAnswer(
+                    pollId = gamePollId,
+                    answersIds = listOf(PollOptionTelegramId(gameAnswer)),
+                    user = user
+                )
+            )
+        }
+
+        pollGameAndTime(users[0], 1, 1)
+
+
 
         //then
         coVerify { telegramBotOutAdapter.startPoll(startGamePollCommand) }
