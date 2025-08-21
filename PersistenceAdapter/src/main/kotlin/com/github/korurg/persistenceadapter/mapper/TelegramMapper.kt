@@ -4,20 +4,22 @@ import com.github.korurg.persistenceadapter.domain.entity.TelegramChatEntity
 import com.github.korurg.persistenceadapter.domain.entity.TelegramUserEntity
 import com.github.korurg.telegrambot.domain.TelegramChat
 import com.github.korurg.telegrambot.domain.TelegramUser
+import com.github.korurg.telegrambot.domain.id.UserId
+import com.github.korurg.telegrambot.domain.id.UserTelegramId
 
 
-fun TelegramUser.toTelegramUserEntity(): TelegramUserEntity = TelegramUserEntity{
-    this@toTelegramUserEntity.id?.let { internalId ->
+fun TelegramUser.toEntity(): TelegramUserEntity = TelegramUserEntity{
+    this@toEntity.id?.let { internalId ->
         id = internalId.value
     }
-    telegramId = this@toTelegramUserEntity.telegramId.value
-    firstName = this@toTelegramUserEntity.firstName
-    lastName = this@toTelegramUserEntity.lastName
-    username = this@toTelegramUserEntity.username
-    isBot = this@toTelegramUserEntity.isBot
-    languageCode = this@toTelegramUserEntity.languageCode
-    updated = this@toTelegramUserEntity.updated
-    created = this@toTelegramUserEntity.created
+    telegramId = this@toEntity.telegramId.value
+    firstName = this@toEntity.firstName
+    lastName = this@toEntity.lastName
+    username = this@toEntity.username
+    isBot = this@toEntity.isBot
+    languageCode = this@toEntity.languageCode
+    updated = this@toEntity.updated
+    created = this@toEntity.created
 }
 
 
@@ -39,4 +41,17 @@ fun TelegramChatEntity.toTelegramChat() = TelegramChat(
     type = this@toTelegramChat.type,
     created = this@toTelegramChat.created,
     updated = this@toTelegramChat.updated
+)
+
+
+fun TelegramUserEntity.toDomain() = TelegramUser(
+    id = UserId(this@toDomain.id),
+    telegramId = UserTelegramId(this@toDomain.telegramId),
+    isBot = this@toDomain.isBot,
+    firstName = this@toDomain.firstName,
+    lastName = this@toDomain.lastName,
+    username = this@toDomain.username,
+    languageCode = this@toDomain.languageCode,
+    updated = this@toDomain.updated,
+    created = this@toDomain.created
 )

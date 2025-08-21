@@ -27,14 +27,14 @@ fun GameEntity.toGame(): Game = Game(
     created = this.created,
 )
 
-fun Game.toGameEntity()= GameEntity {
-    this@toGameEntity.id?.let {
+fun Game.toEntity()= GameEntity {
+    this@toEntity.id?.let {
         id = it.value
     }
-    name = this@toGameEntity.name
-    maxPlayers = this@toGameEntity.maxPlayers
-    minPlayers = this@toGameEntity.minPlayers
-    steamApp = this@toGameEntity.steamApp?.toSteamAppEntity()
+    name = this@toEntity.name
+    maxPlayers = this@toEntity.maxPlayers
+    minPlayers = this@toEntity.minPlayers
+    steamApp = this@toEntity.steamApp?.toSteamAppEntity()
 }
 
 fun SteamAppEntity.toSteamApp(): SteamApp = SteamApp(

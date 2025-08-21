@@ -15,11 +15,11 @@ jimmer = "0.9.106"
 koin = "3.5.6"
 i18n4k = "0.11.0"
 #plugins
-jvm = "2.2.0"
-kapt = "2.2.0"
+jvm = "2.2.10"
+kapt = "2.2.10"
 foojayResolverConvention = "0.8.0"
 gitVersion = "3.4.0"
-ksp = "2.2.0-2.0.2"
+ksp = "2.2.10-2.0.2"
 
 [libraries]
 i18n4k-jvm = { module = "de.comahe.i18n4k:i18n4k-core-jvm", version.ref = "i18n4k" }

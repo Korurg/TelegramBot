@@ -25,7 +25,39 @@ data class TestEnv(
     val steamAppDetails: SteamAppDetails,
     val telegramMessageReceiveUseCase: TelegramMessageReceiveUseCase,
     val kSqlClient: KSqlClient
-)
+) {
+
+    fun <T : Any> save(vararg entities: T): List<T> {
+        return kSqlClient.transaction {
+            entities.map {
+                val saveResult =  kSqlClient.save(it)
+                saveResult.modifiedEntity
+            }
+        }
+    }
+
+    suspend inline fun <reified T : Any> save(
+        noinline block: suspend () -> T
+    ): T {
+        val entity = block()
+        val saveResult = kSqlClient.save(entity)
+        return saveResult.modifiedEntity
+    }
+
+    suspend inline fun <reified T : Any> saveAll(
+        noinline block: suspend () -> List<T>
+    ): List<T> {
+        val entities = block()
+
+        return kSqlClient.transaction {
+            entities.map {
+                val saveResult = kSqlClient.save(it)
+                saveResult.modifiedEntity
+            }
+        }
+    }
+}
+
 
 fun testApplicationWithDb(block: suspend TestEnv.() -> Unit) {
     //TODO: reuse test container

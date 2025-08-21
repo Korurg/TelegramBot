@@ -11,6 +11,7 @@ interface TelegramUserEntity : AuditableEntity {
     @Column(name = "id")
     val id: Long
 
+    @Key
     @Column(name = "telegram_id")
     val telegramId: Long
 

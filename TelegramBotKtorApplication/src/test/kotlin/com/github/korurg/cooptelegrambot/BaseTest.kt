@@ -22,12 +22,13 @@ import com.github.korurg.telegrambot.domain.TelegramMessage
 import com.github.korurg.telegrambot.domain.TelegramUser
 import com.github.korurg.telegrambot.domain.id.ChatTelegramId
 import com.github.korurg.telegrambot.domain.id.MessageId
-import com.github.korurg.telegrambot.domain.id.UserExternalId
+import com.github.korurg.telegrambot.domain.id.UserTelegramId
 import org.assertj.core.api.Assertions.assertThat
 import org.babyfish.jimmer.sql.kt.KSqlClient
 import org.babyfish.jimmer.sql.kt.ast.expression.count
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
+import kotlin.random.Random
 import kotlin.reflect.KClass
 
 open class BaseTest {
@@ -138,21 +139,26 @@ open class BaseTest {
 
     protected fun defaultMessage(text: String): TelegramMessage {
         return TelegramMessage(
-            messageId = MessageId(1),
+            messageId = MessageId(Random.nextLong()),
             chat = TelegramChat(
                 telegramId = defaultChatExternalId(),
                 title = "Test chat",
                 type = "group"
             ),
             text = text,
-            from = TelegramUser(
-                telegramId = UserExternalId(1),
-                isBot = false,
-                firstName = "Test firstname",
-                lastName = "Test lastname",
-                username = "test",
-                languageCode = "en"
-            )
+            from = defaultTelegramUser()
+        )
+    }
+
+
+    protected fun defaultTelegramUser(userTelegramId: UserTelegramId = UserTelegramId(1)): TelegramUser {
+        return TelegramUser(
+            telegramId = userTelegramId,
+            isBot = false,
+            firstName = "Test firstname",
+            lastName = "Test lastname",
+            username = "test",
+            languageCode = "en"
         )
     }
 

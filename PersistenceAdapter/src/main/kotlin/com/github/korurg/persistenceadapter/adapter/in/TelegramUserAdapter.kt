@@ -3,7 +3,7 @@ package com.github.korurg.persistenceadapter.adapter.`in`
 import com.github.korurg.persistenceadapter.domain.entity.TelegramUserEntity
 import com.github.korurg.persistenceadapter.domain.entity.id
 import com.github.korurg.persistenceadapter.domain.entity.telegramId
-import com.github.korurg.persistenceadapter.mapper.toTelegramUserEntity
+import com.github.korurg.persistenceadapter.mapper.toEntity
 import com.github.korurg.telegrambot.application.port.out.TelegramUserSavePort
 import com.github.korurg.telegrambot.domain.TelegramUser
 import kotlinx.coroutines.CoroutineDispatcher
@@ -30,7 +30,7 @@ class TelegramUserAdapter(
             }
 
             sqlClient.save(
-                user.toTelegramUserEntity(), mode = SaveMode.INSERT_ONLY
+                user.toEntity(), mode = SaveMode.INSERT_ONLY
             )
         }
 

@@ -9,7 +9,7 @@ import com.github.korurg.persistenceadapter.domain.entity.by
 import com.github.korurg.persistenceadapter.domain.entity.steamApp
 import com.github.korurg.persistenceadapter.domain.entity.steamId
 import com.github.korurg.persistenceadapter.mapper.toGame
-import com.github.korurg.persistenceadapter.mapper.toGameEntity
+import com.github.korurg.persistenceadapter.mapper.toEntity
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -25,7 +25,7 @@ class GameAdapter(
 
     override suspend fun saveGame(game: Game) = withContext(defaultDbCoroutineDispatcher) {
         sqlClient.transaction {
-            sqlClient.save(game.toGameEntity())
+            sqlClient.save(game.toEntity())
         }
         return@withContext
     }

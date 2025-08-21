@@ -68,10 +68,9 @@ class SurveyService(
     ): CoopPoll {
         val timePollOptions = createTimePollOptions()
 
-        var question = CoopChatModuleMessages.timePollQuestion()
-        game?.let {
-            question = CoopChatModuleMessages.timePollWithConcreteGameQuestion(it.name)
-        }
+        val question = game?.let {
+            CoopChatModuleMessages.timePollWithConcreteGameQuestion(it.name)
+        } ?: CoopChatModuleMessages.timePollQuestion()
 
         val timePoll = telegramPollService.startPoll(
             TelegramStartPollCommand(
@@ -90,7 +89,7 @@ class SurveyService(
                 CoopPollOption(
                     id = CoopPollOptionId.random(),
                     pollOption = it,
-                    type = AnswerType.GAME,
+                    type = AnswerType.TIME,
                     gameIdOption = null,
                     timeOption = timePollOptions[it.option]
                 )

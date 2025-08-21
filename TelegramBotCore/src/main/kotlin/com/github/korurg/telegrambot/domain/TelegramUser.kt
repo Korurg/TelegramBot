@@ -1,12 +1,12 @@
 package com.github.korurg.telegrambot.domain
 
-import com.github.korurg.telegrambot.domain.id.UserExternalId
-import com.github.korurg.telegrambot.domain.id.UserInternalId
+import com.github.korurg.telegrambot.domain.id.UserTelegramId
+import com.github.korurg.telegrambot.domain.id.UserId
 import java.time.OffsetDateTime
 
 data class TelegramUser(
-    val id: UserInternalId? = null,
-    val telegramId: UserExternalId,
+    val id: UserId? = null,
+    val telegramId: UserTelegramId,
     val isBot: Boolean,
     val firstName: String,
     val lastName: String?,
