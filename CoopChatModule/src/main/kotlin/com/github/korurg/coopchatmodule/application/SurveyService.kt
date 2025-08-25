@@ -3,10 +3,12 @@ package com.github.korurg.coopchatmodule.application
 import CoopChatModuleMessages
 import com.github.korurg.coopchatmodule.application.port.`in`.GameQueryPort
 import com.github.korurg.coopchatmodule.application.port.out.SurveyCommandPort
-import com.github.korurg.coopchatmodule.domain.*
+import com.github.korurg.coopchatmodule.domain.CoopPoll
+import com.github.korurg.coopchatmodule.domain.CoopPollOption
+import com.github.korurg.coopchatmodule.domain.Game
+import com.github.korurg.coopchatmodule.domain.Survey
 import com.github.korurg.coopchatmodule.domain.enums.AnswerType
 import com.github.korurg.coopchatmodule.domain.enums.CoopPollType
-import com.github.korurg.coopchatmodule.domain.enums.SurveyScheduleType
 import com.github.korurg.coopchatmodule.domain.enums.SurveyState
 import com.github.korurg.coopchatmodule.domain.id.CoopPollId
 import com.github.korurg.coopchatmodule.domain.id.CoopPollOptionId
@@ -41,18 +43,9 @@ class SurveyService(
         val game = if (games.size == 1) games.first() else null
         val timePoll = startTimePoll(chatId, game)
 
-        val nowDate = LocalDate.now()
-
         val survey = Survey(
             id = SurveyId.random(),
             state = SurveyState.ACTIVE,
-            schedule = SurveySchedule(
-                startDate = nowDate,
-                endDate = nowDate,
-                type = SurveyScheduleType.ONCE,
-                intervalCron = DEFAULT_START_POLL_TIME,
-                timezone = DEFAULT_TIMEZONE,
-            ),
             chat = telegramChat,
             timeCoopPoll = timePoll,
             gameCoopPoll = gamePoll,

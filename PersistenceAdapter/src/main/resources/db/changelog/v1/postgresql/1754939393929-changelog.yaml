@@ -283,3 +283,22 @@ databaseChangeLog:
                     nullable: false
                     foreignKeyName: fk_telegram_poll_option_id
                     references: telegram_poll_option(id)
+        - createTable:
+            tableName: survey_survey_schedule
+            columns:
+              - column:
+                  name: survey_id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    foreignKeyName: fk_survey_id
+                    references: survey(id)
+              - column:
+                  name: survey_schedule_id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    foreignKeyName: fk_survey_schedule_id
+                    references: survey_schedule(id)

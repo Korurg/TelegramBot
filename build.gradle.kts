@@ -39,6 +39,7 @@ subprojects {
             add("testImplementation", kotlin("test"))
             add("testImplementation", "org.mockito:mockito-core:5.18.0")//TODO: to remove
             add("testImplementation", "io.mockk:mockk:1.14.5")
+            add("testImplementation", libs.kotest.runner)
         }
 
     }

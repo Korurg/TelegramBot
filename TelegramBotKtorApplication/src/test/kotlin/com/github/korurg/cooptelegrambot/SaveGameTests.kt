@@ -11,7 +11,7 @@ import io.mockk.coEvery
 import org.koin.ktor.ext.get
 import kotlin.test.Test
 
-class SaveGameTests : BaseTest() {
+class SaveGameTests {
 
     @Test
     fun `save games by steam link`() = testApplicationWithDb {
@@ -60,9 +60,11 @@ class SaveGameTests : BaseTest() {
 
         assertThatNotNull(actualGame1)
         assertThatNotNull(actualGame2)
-        assertThatTableRecordsCount(2, SteamAppEntity::class, kSqlClient)
-        assertThatTableRecordsCount(2, SteamAppCategoryEntity::class, kSqlClient)
+        assertThatTableRecordsCount(2, SteamAppEntity::class)
+        assertThatTableRecordsCount(2, SteamAppCategoryEntity::class)
         assertThatGameEqualsAppDetail(actualGame1, appDetail1)
         assertThatGameEqualsAppDetail(actualGame2, appDetail2)
+
+        //TODO: assert telegram message via mockk
     }
 }

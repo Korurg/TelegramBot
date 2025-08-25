@@ -11,10 +11,8 @@ interface SurveyScheduleEntity : AuditableEntity {
     @Column(name = "id")
     val id: Long
 
-    @Key
-    @OneToOne
-    @JoinColumn(name = "survey_id")
-    val survey: SurveyEntity
+    @OneToMany(mappedBy = "schedule")
+    val surveys: List<SurveyEntity>
 
     @Column(name = "start_date")
     val startDate: LocalDate

@@ -9,8 +9,10 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 
 class TelegramBotService(
     val messageTriggers: List<TelegramBotReceiveMessageTrigger> = ArrayList(),
+    val pollAnswerTriggers: List<TelegramBotReceivePollAnswerTrigger> = ArrayList(),
     val telegramUserSavePort: TelegramUserSavePort,
     val telegramChatSavePort: TelegramChatSavePort,
+    val telegramPollService: TelegramPollService,
 ) : TelegramMessageReceiveUseCase {
     private val logger = KotlinLogging.logger {}
 
@@ -31,11 +33,15 @@ class TelegramBotService(
     }
 
     override suspend fun receivePollAnswer(pollAnswer: TelegramPollAnswer) {
+        val savedPollAnswer = telegramPollService.savePollAnswer(pollAnswer)
 
-
-        TODO("Not yet implemented")
-
-
+        pollAnswerTriggers.forEach {
+            try {
+                it.handlePollAnswer(savedPollAnswer)
+            } catch (e: Exception) {
+                logger.error(e) { e.message }
+            }
+        }
     }
 
 }

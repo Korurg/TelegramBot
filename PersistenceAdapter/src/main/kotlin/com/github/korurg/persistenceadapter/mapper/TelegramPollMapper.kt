@@ -1,9 +1,11 @@
 package com.github.korurg.persistenceadapter.mapper
 
 import com.github.korurg.persistenceadapter.domain.entity.TelegramChatEntity
+import com.github.korurg.persistenceadapter.domain.entity.TelegramPollAnswerEntity
 import com.github.korurg.persistenceadapter.domain.entity.TelegramPollEntity
 import com.github.korurg.persistenceadapter.domain.entity.TelegramPollOptionEntity
 import com.github.korurg.telegrambot.domain.TelegramPoll
+import com.github.korurg.telegrambot.domain.TelegramPollAnswer
 import com.github.korurg.telegrambot.domain.TelegramPollOption
 import com.github.korurg.telegrambot.domain.enums.PollType
 import com.github.korurg.telegrambot.domain.id.*
@@ -43,3 +45,8 @@ fun TelegramPollOptionEntity.toDomain() = TelegramPollOption(
     telegramId = PollOptionTelegramId(telegramId),
     option = option
 )
+
+fun TelegramPollAnswer.toEntity() = TelegramPollAnswerEntity{
+    user = this@toEntity.user.toEntity()
+//    pollOption = this@toEntity.pollOptionTelegramId
+}

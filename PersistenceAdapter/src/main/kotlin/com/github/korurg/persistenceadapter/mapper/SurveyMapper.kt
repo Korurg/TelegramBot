@@ -14,7 +14,7 @@ fun Survey.toEntity() = SurveyEntity {
     id = this@toEntity.id.value
     chatId = requireNotNull(this@toEntity.chat.id).value
     state = this@toEntity.state.name
-    schedule = this@toEntity.schedule.toEntity()
+    schedule = this@toEntity.schedule?.toEntity()
     gamePoll = this@toEntity.gameCoopPoll?.toEntity()
     timePoll = this@toEntity.timeCoopPoll.toEntity()
 }

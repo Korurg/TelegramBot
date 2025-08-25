@@ -32,7 +32,9 @@ class TelegramBotInAdapter(
     internal fun pollAnswer(): PollAnswerHandlerEnvironment.() -> Unit = {
         CoroutineScope(Dispatchers.Default).launch {
             try {
-                telegramMessageReceiveUseCase.receivePollAnswer(pollAnswer.toTelegramPollAnswer())
+                pollAnswer.toTelegramPollAnswer().forEach {
+                    telegramMessageReceiveUseCase.receivePollAnswer(it)
+                }
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Throwable) {

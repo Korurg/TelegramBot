@@ -7,15 +7,20 @@ import com.github.korurg.telegrambot.application.port.`in`.TelegramMessageReceiv
 import com.github.korurg.telegrambot.config.L18n14kConfig
 import org.koin.core.module.dsl.createdAtStart
 import org.koin.core.module.dsl.singleOf
+import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val telegramBotCoreModule = module {
     single(createdAtStart = true) {
         TelegramBotService(
             getAll(),
+            getAll(),
             get(),
-            get()
-        ) as TelegramMessageReceiveUseCase
+            get(),
+            get(),
+        )
+    }.apply {
+        bind(TelegramMessageReceiveUseCase::class)
     }
 
     singleOf(::L18n14kConfig){

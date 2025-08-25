@@ -3,6 +3,7 @@ package com.github.korurg.telegrambot.application
 import com.github.korurg.telegrambot.application.port.out.TelegramCommandPort
 import com.github.korurg.telegrambot.application.port.out.TelegramPollSavePort
 import com.github.korurg.telegrambot.domain.TelegramPoll
+import com.github.korurg.telegrambot.domain.TelegramPollAnswer
 import com.github.korurg.telegrambot.domain.TelegramPollOption
 import com.github.korurg.telegrambot.domain.TelegramStartPollCommand
 import com.github.korurg.telegrambot.domain.id.PollId
@@ -38,5 +39,9 @@ class TelegramPollService(
         val savedPoll = telegramPollSavePort.savePoll(telegramPoll)
 
         return savedPoll
+    }
+
+    suspend fun savePollAnswer(pollAnswer: TelegramPollAnswer): TelegramPollAnswer {
+        return telegramPollSavePort.savePollAnswer(pollAnswer)
     }
 }

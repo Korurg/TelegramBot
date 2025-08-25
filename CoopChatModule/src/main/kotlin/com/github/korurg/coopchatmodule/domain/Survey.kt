@@ -9,7 +9,7 @@ import java.time.OffsetDateTime
 data class Survey(
     val id: SurveyId,
     val state: SurveyState,
-    val schedule: SurveySchedule,
+    val schedule: SurveySchedule? = null,
     val chat: TelegramChat,
     val timeCoopPoll: CoopPoll,
     val gameCoopPoll: CoopPoll?,

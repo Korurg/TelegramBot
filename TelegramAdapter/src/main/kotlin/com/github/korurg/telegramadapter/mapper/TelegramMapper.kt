@@ -39,8 +39,12 @@ fun Chat.toTelegramChat() = TelegramChat(
 )
 
 
-fun PollAnswer.toTelegramPollAnswer() = TelegramPollAnswer(
-    pollId = PollTelegramId(pollId),
-    answersIds = optionIds.map { PollOptionTelegramId(it) },
-    user = user.toTelegramUser(),
-)
+fun PollAnswer.toTelegramPollAnswer() : List<TelegramPollAnswer> {
+    return optionIds.map {
+        TelegramPollAnswer(
+            pollTelegramId = PollTelegramId(pollId),
+            pollOptionTelegramId =  PollOptionTelegramId(it),
+            user = user.toTelegramUser(),
+        )
+    }
+}

@@ -2,7 +2,7 @@ package com.github.korurg.persistenceadapter.domain.entity
 
 import org.babyfish.jimmer.sql.*
 import org.babyfish.jimmer.sql.meta.UUIDIdGenerator
-import java.util.UUID
+import java.util.*
 
 @Entity
 @Table(name = "survey")
@@ -26,6 +26,11 @@ interface SurveyEntity : AuditableEntity {
     @JoinColumn(name = "time_poll_id")
     val timePoll: CoopPollEntity
 
-    @OneToOne(mappedBy = "survey")
+    @ManyToOne
+    @JoinTable(
+        name = "survey_survey_schedule",
+        joinColumnName = "survey_id",
+        inverseJoinColumnName = "survey_schedule_id"
+    )
     val schedule: SurveyScheduleEntity?
 }
