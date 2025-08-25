@@ -26,9 +26,7 @@ class TelegramPollAdapter(
         withContext(defaultDbCoroutineDispatcher) {
             kSqlClient.transaction {
                 val saveResult = kSqlClient.save(pollAnswer.toEntity())
-//                saveResult.modifiedEntity.toDomain()
+                saveResult.modifiedEntity.toDomain()
             }
-
-            TODO("Not yet implemented")
         }
 }

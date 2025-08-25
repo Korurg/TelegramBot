@@ -46,7 +46,20 @@ fun TelegramPollOptionEntity.toDomain() = TelegramPollOption(
     option = option
 )
 
-fun TelegramPollAnswer.toEntity() = TelegramPollAnswerEntity{
+fun TelegramPollAnswer.toEntity() = TelegramPollAnswerEntity {
     user = this@toEntity.user.toEntity()
-//    pollOption = this@toEntity.pollOptionTelegramId
+    id = this@toEntity.id.value
+    pollOption = TelegramPollOptionEntity {
+        telegramId = this@toEntity.pollOptionTelegramId.value
+        poll = TelegramPollEntity {
+            telegramId = this@toEntity.pollTelegramId.value
+        }
+    }
 }
+
+fun TelegramPollAnswerEntity.toDomain() = TelegramPollAnswer(
+    id = TelegramPollAnswerId(this@toDomain.id),
+    pollTelegramId = PollTelegramId(this@toDomain.pollOption.poll.telegramId),
+    pollOptionTelegramId = PollOptionTelegramId(this@toDomain.pollOption.telegramId),
+    user = this@toDomain.user.toDomain()
+)

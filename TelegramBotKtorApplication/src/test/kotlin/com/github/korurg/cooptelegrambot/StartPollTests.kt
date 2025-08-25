@@ -13,6 +13,7 @@ import com.github.korurg.telegrambot.domain.TelegramUser
 import com.github.korurg.telegrambot.domain.enums.PollType
 import com.github.korurg.telegrambot.domain.id.PollOptionTelegramId
 import com.github.korurg.telegrambot.domain.id.PollTelegramId
+import com.github.korurg.telegrambot.domain.id.TelegramPollAnswerId
 import io.kotest.core.spec.style.FreeSpec
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -83,6 +84,7 @@ class StartPollTests : FreeSpec({
                         suspend fun pollGameAndTime(user: TelegramUser, timeAnswer: Int, gameAnswer: Int) {
                             telegramMessageReceiveUseCase.receivePollAnswer(
                                 TelegramPollAnswer(
+                                    id = TelegramPollAnswerId.random(),
                                     pollTelegramId = timePollId,
                                     pollOptionTelegramId = PollOptionTelegramId(timeAnswer),
                                     user = user
@@ -90,6 +92,7 @@ class StartPollTests : FreeSpec({
                             )
                             telegramMessageReceiveUseCase.receivePollAnswer(
                                 TelegramPollAnswer(
+                                    id = TelegramPollAnswerId.random(),
                                     pollTelegramId = gamePollId,
                                     pollOptionTelegramId = PollOptionTelegramId(gameAnswer),
                                     user = user
@@ -104,23 +107,29 @@ class StartPollTests : FreeSpec({
 
 
                         //first decisions
-//                        pollGameAndTime(users[0], 1, 1)
-//                        pollGameAndTime(users[1], 2, 2)
-//                        pollGameAndTime(users[2], 2, 1)
-//                        pollGameAndTime(users[4], 4, 1)
+                        pollGameAndTime(users[0], 1, 1)
+                        pollGameAndTime(users[1], 2, 2)
+                        pollGameAndTime(users[2], 2, 1)
+                        pollGameAndTime(users[3], 4, 1)
 
                         //user change time and game
-//                        pollGameAndTime(users[1], 4, 1)
+                        pollGameAndTime(users[1], 4, 1)
 
                         //then
                         coVerify { telegramBotOutAdapter.startPoll(startGamePollCommand) }
                         coVerify { telegramBotOutAdapter.startPoll(startTimePollCommand) }
+
+                        //TODO: проверить, что в телегу отправляется сообщение о завершении опроса
+                        //TODO: проверять, что в телегу отправляется сообщение о смене игры или места
+
+                        //TODO: сохранять и пересохранять итоговый результат опроса
 
                         SurveyEntity::class tableShouldBeSize 1
                         CoopPollEntity::class tableShouldBeSize 2
                         CoopPollOptionEntity::class tableShouldBeSize 9
                         TelegramPollEntity::class tableShouldBeSize 2
                         TelegramPollOptionEntity::class tableShouldBeSize 9
+                        TelegramPollAnswerEntity::class tableShouldBeSize 10
                     }
                 }
             }

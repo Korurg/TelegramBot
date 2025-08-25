@@ -5,6 +5,7 @@ import org.babyfish.jimmer.sql.Entity
 import org.babyfish.jimmer.sql.GeneratedValue
 import org.babyfish.jimmer.sql.Id
 import org.babyfish.jimmer.sql.JoinColumn
+import org.babyfish.jimmer.sql.Key
 import org.babyfish.jimmer.sql.ManyToOne
 import org.babyfish.jimmer.sql.OneToMany
 import org.babyfish.jimmer.sql.Table
@@ -20,12 +21,14 @@ interface TelegramPollOptionEntity: AuditableEntity {
     @Column(name = "id")
     val id: UUID
 
+    @Key
     @Column(name = "telegram_id")
     val telegramId: Int
 
     @Column(name = "option")
     val option: String
 
+    @Key
     @ManyToOne
     @JoinColumn(name = "telegram_poll_id")
     val poll: TelegramPollEntity

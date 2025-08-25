@@ -8,6 +8,7 @@ import com.github.korurg.telegrambot.domain.id.ChatTelegramId
 import com.github.korurg.telegrambot.domain.id.MessageId
 import com.github.korurg.telegrambot.domain.id.PollOptionTelegramId
 import com.github.korurg.telegrambot.domain.id.PollTelegramId
+import com.github.korurg.telegrambot.domain.id.TelegramPollAnswerId
 import com.github.korurg.telegrambot.domain.id.UserTelegramId
 import com.github.kotlintelegrambot.entities.Chat
 import com.github.kotlintelegrambot.entities.Message
@@ -43,8 +44,9 @@ fun PollAnswer.toTelegramPollAnswer() : List<TelegramPollAnswer> {
     return optionIds.map {
         TelegramPollAnswer(
             pollTelegramId = PollTelegramId(pollId),
-            pollOptionTelegramId =  PollOptionTelegramId(it),
+            pollOptionTelegramId = PollOptionTelegramId(it),
             user = user.toTelegramUser(),
+            id = TelegramPollAnswerId.random(),
         )
     }
 }
